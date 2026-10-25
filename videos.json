@@ -2,9 +2,19 @@
   "settings": {
     "youtube": "https://www.youtube.com/@vivothemestore",
     "telegram": "https://t.me/your_channel",
-    "youtubeChannel": ""
+    "youtubeChannel": "https://youtube.com/@vivothemestore?si=FtaEG8MvvntiWS8X"
   },
   "videos": [
+    {
+      "title": "One UI 9 Inspired Theme for Vivo & iQOO | Customization Concept 📱",
+      "description": "For Download Visit Video And Follow Instruction",
+      "category": "latest",
+      "tag": "Latest Video",
+      "thumbnail": "https://img.youtube.com/vi/CB0HzvujC44/hqdefault.jpg",
+      "url": "https://youtu.be/CB0HzvujC44?si=FlIfeu9MXq75NfEf",
+      "download": "",
+      "id": "video-1792902171007"
+    },
     {
       "title": "OriginOS Theme Preview",
       "section": "latest",
