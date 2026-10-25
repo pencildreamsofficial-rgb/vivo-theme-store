@@ -1,7 +1,8 @@
 {
   "settings": {
     "youtube": "https://www.youtube.com/@vivothemestore",
-    "telegram": "https://t.me/your_channel"
+    "telegram": "https://t.me/your_channel",
+    "youtubeChannel": ""
   },
   "videos": [
     {
