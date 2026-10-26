@@ -1,152 +1,225 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Theme Download | Vivo Theme Store</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090611">
+<title>Theme Download Portal</title>
 <style>
+:root{--bg:#090611;--panel:#151023;--purple:#a855f7;--cyan:#67e8f9;--muted:#b9aecf}
 *{box-sizing:border-box}
-body{margin:0;background:#080610;color:#f5f0ff;font-family:Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:20px}
-.card{width:100%;max-width:480px;background:#151020;border:1px solid #49316b;border-radius:22px;padding:26px;text-align:center;box-shadow:0 0 30px #7027b522}
-.logo{color:#c084fc;font-weight:bold;letter-spacing:2px}
-h1{font-size:26px}
-.sub{color:#b9adc9;line-height:1.6}
-.step{display:flex;gap:14px;text-align:left;align-items:flex-start;background:#21172f;border-radius:14px;padding:14px;margin:14px 0}
-.num{background:#7138a5;border-radius:50%;min-width:34px;height:34px;display:grid;place-items:center;font-weight:bold}
-.step p{margin:5px 0;color:#c9bdd8;line-height:1.5;font-size:14px}
-button,.download{display:block;width:100%;border:0;border-radius:12px;padding:15px;background:#a855f7;color:white;font-weight:bold;font-size:16px;text-decoration:none;cursor:pointer;margin-top:18px}
+body{margin:0;background:radial-gradient(ellipse at top,#281344 0%,var(--bg) 55%);color:#fff;font-family:Arial,sans-serif;min-height:100vh;padding:22px 14px}
+button,input{font:inherit}
+button{cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
-#status{color:#c084fc;font-size:14px;margin-top:15px;line-height:1.5}
-.hidden{display:none}
-input{width:100%;padding:14px;border-radius:10px;border:1px solid #754b98;background:#0d0915;color:white;font-size:18px;margin-top:12px}
+.app{max-width:520px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:2px;color:var(--cyan)}
+.pill{border:1px solid #49336b;border-radius:30px;padding:7px 10px}
+h1{font-size:clamp(25px,7vw,35px);margin:24px 0 8px}
+p{line-height:1.6}
+.muted{color:var(--muted);font-size:14px}
+.track{display:flex;gap:6px;margin:24px 0}
+.track span{height:4px;background:#332442;border-radius:9px;flex:1;transition:.4s}
+.track span.active{background:var(--cyan);box-shadow:0 0 12px #67e8f9}
+.panel{position:relative;overflow:hidden;background:linear-gradient(145deg,#1c1430,#100d1c);border:1px solid #493365;border-radius:24px;padding:23px 19px;box-shadow:0 15px 55px #0005;animation:enter .45s ease both}
+@keyframes enter{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+.visual{height:180px;display:grid;place-items:center;position:relative;margin-bottom:18px;overflow:hidden;border-radius:17px;background:radial-gradient(circle,#352052 0%,#130e20 65%)}
+.visual:before,.visual:after{content:"";position:absolute;width:130px;height:130px;border:1px solid #a855f766;border-radius:50%;animation:spin 8s linear infinite}
+.visual:after{width:165px;height:165px;border-color:#67e8f955;border-style:dashed;animation-direction:reverse;animation-duration:13s}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb{font-size:65px;filter:drop-shadow(0 0 18px #b36aff);animation:float 2.5s ease-in-out infinite;z-index:1}
+@keyframes float{50%{transform:translateY(-8px) scale(1.05)}}
+.particles{position:absolute;inset:0;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:31px 31px;opacity:.18;animation:drift 12s linear infinite}
+@keyframes drift{to{background-position:62px -62px}}
+h2{font-size:22px;margin:8px 0}
+.label{font-size:11px;color:var(--cyan);letter-spacing:2px}
+.info{background:#0b0914;border:1px solid #30213f;border-radius:13px;padding:13px;margin:12px 0;overflow-wrap:anywhere}
+.info small{color:var(--muted);display:block;margin-bottom:6px}
+.info strong{font-size:14px}
+.row{display:flex;gap:10px;align-items:center}
+.row .info{flex:1;min-width:0}
+.button{width:100%;border:0;border-radius:12px;padding:15px;background:linear-gradient(100deg,#9333ea,#6d28d9);color:#fff;font-weight:bold;box-shadow:0 5px 22px #9333ea33;transition:transform .2s,filter .2s}
+.button:not(:disabled):hover{filter:brightness(1.18);transform:translateY(-2px)}
+.secondary{background:#211632;border:1px solid #573d75;box-shadow:none;margin-top:10px}
+.status{min-height:24px;color:var(--cyan);font-size:13px;margin-top:13px}
+.bar{height:7px;background:#332442;border-radius:20px;overflow:hidden;margin:18px 0}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,#9333ea,var(--cyan));transition:width .35s}
+.check{display:flex;gap:10px;align-items:center;padding:10px 0;color:#ded4ee;font-size:14px}
+.check b{color:var(--cyan)}
+input{width:100%;padding:14px;background:#0b0914;color:white;border:1px solid #68478c;border-radius:12px;margin:10px 0;outline:none}
+input:focus{border-color:var(--cyan)}
+.lock{font-size:67px;transition:transform .7s,filter .7s}
+.unlocked .lock{transform:rotate(-18deg) scale(1.25);filter:drop-shadow(0 0 25px #67e8f9)}
+.burst{position:absolute;font-size:20px;color:var(--cyan);opacity:0;pointer-events:none}
+.unlocked .burst{animation:burst .9s ease-out}
+@keyframes burst{0%{opacity:0;transform:scale(.2)}30%{opacity:1}100%{opacity:0;transform:scale(5)}}
+footer{text-align:center;color:#786b8c;font-size:11px;margin:20px 0}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<main class="card">
-<div class="logo">VIVO THEME STORE</div>
-<h1 id="heading">Welcome!</h1>
-<p class="sub" id="intro">Your theme download is almost ready.</p>
+<main class="app">
+ <div class="top"><b>VIVO THEME STORE</b><span class="pill">DOWNLOAD PORTAL</span></div>
+ <h1 id="heading">Enter the portal.</h1>
+ <p class="muted" id="intro">A guided experience for your selected theme.</p>
+ <div class="track" id="track">
+  <span class="active"></span><span></span><span></span><span></span>
+ </div>
 
-<section id="page1">
-<div class="step"><div class="num">1</div><div><b>Welcome to Theme Download</b><p>Please continue through the steps to access your theme link.</p></div></div>
-<button id="continue1" disabled>Wait 5 seconds...</button>
-</section>
-
-<section id="page2" class="hidden">
-<div class="step"><div class="num">2</div><div><b>Theme details</b><p id="themeName">Theme name</p><p id="devices">Supported devices: Check the theme description.</p><p>Make sure your device and OS are compatible before downloading.</p></div></div>
-<button id="continue2" disabled>Wait 5 seconds...</button>
-</section>
-
-<section id="page3" class="hidden">
-<div class="step"><div class="num">3</div><div><b>Quick verification</b><p>Solve the maths question to reveal Get Link.</p></div></div>
-<h2 id="question">5 + 2 = ?</h2>
-<input id="answer" type="number" inputmode="numeric" placeholder="Enter your answer">
-<button id="verify">Verify answer</button>
-<button id="getLink" disabled>Get Link</button>
-</section>
-
-<p id="status" aria-live="polite"></p>
+ <section class="panel" id="screen">
+  <div class="visual"><div class="particles"></div><div class="orb">◈</div></div>
+  <div class="label">STAGE 01 / INITIALIZATION</div>
+  <h2>Initialize Theme Portal</h2>
+  <p class="muted">Prepare your theme download session. Continue when the short initialization finishes.</p>
+  <div class="bar"><div id="progress"></div></div>
+  <div class="status" id="status" aria-live="polite">Initializing portal...</div>
+  <button class="button" id="next" disabled>Please wait...</button>
+ </section>
+ <footer>VIVO THEME STORE · Check theme compatibility before installing.</footer>
 </main>
 
 <script>
 const params=new URLSearchParams(location.search);
-const raw=params.get('url')||'';
 const title=params.get('title')||'Vivo Theme';
-const devices=params.get('devices')||'Check the theme description for supported devices.';
-let driveURL=null;
-
+const devices=params.get('devices')||'Check the theme description';
+const raw=params.get('url')||'';
+let downloadURL=null;
 try{
  const u=new URL(raw);
- if(u.protocol==='https:' &&
+ if(u.protocol==='https:'&&
  (u.hostname==='drive.google.com'||u.hostname==='docs.google.com')){
-  driveURL=u.href;
+  downloadURL=u.href;
  }
 }catch(e){}
 
-document.getElementById('themeName').textContent='Theme: '+title;
-document.getElementById('devices').textContent='Supported devices: '+devices;
+const $=id=>document.getElementById(id);
+const screen=$('screen'),status=$('status'),next=$('next');
+let stage=1,answer=0,unlocked=false;
 
-const status=document.getElementById('status');
-function countdown(button,seconds,label,callback){
+function setHeader(h,p){
+ $('heading').textContent=h;
+ $('intro').textContent=p;
+ [...$('track').children].forEach((el,i)=>el.classList.toggle('active',i<stage));
+}
+function render(html){
+ screen.innerHTML=html;
+ screen.classList.remove('unlocked');
+ screen.style.animation='none';
+ void screen.offsetWidth;
+ screen.style.animation='';
+}
+function graphic(icon,label){
+ return `<div class="visual"><div class="particles"></div><div class="orb">${icon}</div></div><div class="label">${label}</div>`;
+}
+function beginTimer(seconds,button,label,done){
  button.disabled=true;
  let left=seconds;
- button.textContent=`Wait ${left} seconds...`;
+ button.textContent=`Preparing... ${left}s`;
+ const bar=$('progress');
+ if(bar)bar.style.width='0%';
  const tick=()=>{
   left--;
+  if(bar)bar.style.width=((seconds-left)/seconds*100)+'%';
   if(left<=0){
    button.disabled=false;
    button.textContent=label;
-   callback();
+   done();
   }else{
-   button.textContent=`Wait ${left} seconds...`;
+   button.textContent=`Preparing... ${left}s`;
    setTimeout(tick,1000);
   }
  };
  setTimeout(tick,1000);
 }
-
-function showPage(page,heading,intro){
- ['page1','page2','page3'].forEach(id=>
-  document.getElementById(id).classList.toggle('hidden',id!==page)
- );
- document.getElementById('heading').textContent=heading;
- document.getElementById('intro').textContent=intro;
- status.textContent='';
+function stageOne(){
+ stage=1;setHeader('Enter the portal.','A guided experience for your selected theme.');
+ render(`${graphic('◈','STAGE 01 / INITIALIZATION')}
+ <h2>Initialize Theme Portal</h2>
+ <p class="muted">Your download journey starts here. The portal will guide you through the theme details before revealing the link.</p>
+ <div class="bar"><div id="progress"></div></div>
+ <div class="status" id="status">Preparing your session...</div>
+ <button class="button" id="next" disabled>Please wait...</button>`);
+ const b=$('next');
+ beginTimer(3,b,'Continue to Theme Details',()=>{$('status').textContent='Portal ready. You can continue.'});
+ b.addEventListener('click',stageTwo);
 }
-
-countdown(document.getElementById('continue1'),5,'Continue',()=>{});
-
-document.getElementById('continue1').addEventListener('click',()=>{
- showPage('page2','Theme Details','Please check compatibility before continuing.');
- countdown(document.getElementById('continue2'),5,'Continue',()=>{});
-});
-
-document.getElementById('continue2').addEventListener('click',()=>{
- showPage('page3','Verify to Get Link','Answer the question correctly to continue.');
- const a=Math.floor(Math.random()*9)+1;
- const b=Math.floor(Math.random()*9)+1;
- document.getElementById('question').textContent=`${a} + ${b} = ?`;
- document.getElementById('answer').value='';
- document.getElementById('getLink').disabled=true;
- document.getElementById('verify').disabled=false;
- document.getElementById('answer').disabled=false;
- document.getElementById('verify').textContent='Verify answer';
- document.getElementById('verify').dataset.answer=String(a+b);
-});
-
-document.getElementById('verify').addEventListener('click',()=>{
- const answer=document.getElementById('answer');
- const verify=document.getElementById('verify');
- if(answer.value.trim()==='' ){
-  status.textContent='Please enter your answer first.';
-  return;
- }
- if(Number(answer.value)!==Number(verify.dataset.answer)){
-  status.textContent='Incorrect answer. Try again.';
-  const a=Math.floor(Math.random()*9)+1;
-  const b=Math.floor(Math.random()*9)+1;
-  document.getElementById('question').textContent=`${a} + ${b} = ?`;
-  verify.dataset.answer=String(a+b);
-  answer.value='';
-  document.getElementById('getLink').disabled=true;
-  return;
- }
- status.textContent='Correct! You can now get your link.';
- document.getElementById('getLink').disabled=false;
- verify.disabled=true;
- answer.disabled=true;
-});
-
-document.getElementById('getLink').addEventListener('click',()=>{
- if(!driveURL){
-  status.textContent='Google Drive link is missing or invalid. Please contact the website owner.';
-  return;
- }
- if(!document.getElementById('getLink').disabled){
-  location.href=driveURL;
- }
-});
+function stageTwo(){
+ stage=2;setHeader('Inspect your theme.','Review the theme information before proceeding.');
+ render(`${graphic('▣','STAGE 02 / THEME INTELLIGENCE')}
+ <h2 id="themeTitle"></h2>
+ <p class="muted">Review these details before installing the theme.</p>
+ <div class="info"><small>THEME NAME</small><strong id="name"></strong></div>
+ <div class="info"><small>SUPPORTED DEVICES</small><strong id="device"></strong></div>
+ <div class="check"><b>✓</b> Check your device model</div>
+ <div class="check"><b>✓</b> Confirm theme compatibility</div>
+ <div class="check"><b>✓</b> Follow the installation guide</div>
+ <div class="status" id="status">Theme details loaded.</div>
+ <button class="button" id="next">Continue to Unlock</button>
+ <button class="button secondary" id="back">Back</button>`);
+ $('name').textContent=title;
+ $('themeTitle').textContent=title;
+ $('device').textContent=devices;
+ $('next').addEventListener('click',stageThree);
+ $('back').addEventListener('click',stageOne);
+}
+function stageThree(){
+ stage=3;unlocked=false;
+ setHeader('Unlock the download.','Complete the quick interaction to continue.');
+ const a=Math.floor(Math.random()*8)+2;
+ const b=Math.floor(Math.random()*8)+2;
+ answer=a+b;
+ render(`${graphic('🔒','STAGE 03 / ACCESS CONTROL')}
+ <h2>Unlock Sequence</h2>
+ <p class="muted">Solve the quick check to trigger the unlock animation and open the final download stage.</p>
+ <div class="info" style="text-align:center"><div class="lock" id="lock">🔒</div><strong id="lockText">PORTAL LOCKED</strong><div class="burst">✦</div></div>
+ <h2 style="text-align:center">${a} + ${b} = ?</h2>
+ <input id="answerInput" type="number" inputmode="numeric" placeholder="Enter your answer" aria-label="Answer">
+ <button class="button" id="verify">Verify & Unlock</button>
+ <button class="button secondary" id="back">Back to Details</button>
+ <div class="status" id="status" aria-live="polite"></div>`);
+ $('verify').addEventListener('click',()=>{
+  if($('answerInput').value.trim()===''){
+   $('status').textContent='Enter an answer to continue.';return;
+  }
+  if(Number($('answerInput').value)!==answer){
+   $('status').textContent='Not quite. Try again.';
+   $('answerInput').value='';return;
+  }
+  unlocked=true;
+  screen.classList.add('unlocked');
+  $('lock').textContent='🔓';
+  $('lockText').textContent='ACCESS GRANTED';
+  $('status').textContent='Correct! Unlock animation complete.';
+  $('verify').textContent='Continue to Download';
+  $('verify').onclick=stageFour;
+ });
+ $('back').addEventListener('click',stageTwo);
+}
+function stageFour(){
+ if(!unlocked)return;
+ stage=4;setHeader('Your download is ready.','Review the final instructions and open your theme link.');
+ render(`${graphic('⇩','STAGE 04 / DOWNLOAD CENTER')}
+ <h2>Download Center</h2>
+ <p class="muted">Your selected theme is ready. Follow the instructions below to download it from the file host.</p>
+ <div class="info"><small>SELECTED FILE</small><strong id="fileTitle"></strong><p class="muted">Check the file name and follow the theme installation tutorial for your device.</p></div>
+ <div class="check"><b>01</b> Open the download link</div>
+ <div class="check"><b>02</b> Download the file from the host</div>
+ <div class="check"><b>03</b> Follow the installation guide</div>
+ <button class="button" id="get">Get Download Link ↗</button>
+ <button class="button secondary" id="back">Back</button>
+ <div class="status" id="status" aria-live="polite"></div>`);
+ $('fileTitle').textContent=title;
+ $('get').addEventListener('click',()=>{
+  if(!downloadURL){
+   $('status').textContent='The download URL is missing or invalid. Please contact the site owner.';return;
+  }
+  window.location.href=downloadURL;
+ });
+ $('back').addEventListener('click',stageThree);
+}
+stageOne();
 </script>
 </body>
 </html>
-
