@@ -2,333 +2,226 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f8ff">
-  <meta name="description" content="Check your Vivo theme details and follow the theme installation guide.">
-  <title>Theme Passport — Vivo Theme Store</title>
-  <link rel="stylesheet" href="style.css">
-
-  <style>
-    .passport-page{max-width:900px;margin:auto;padding:30px 18px 60px}
-    .passport-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px}
-    .back-link{color:#4267e7;font-weight:750;font-size:13px}
-    .passport-label{font-size:10px;letter-spacing:2px;font-weight:850;color:#4267e7}
-    .passport-hero{text-align:center;padding:35px 18px 30px;border:1px solid #e0e8f5;border-radius:26px;background:linear-gradient(145deg,#fff,#edf4ff);box-shadow:0 15px 45px #294b8010}
-    .passport-orb{width:90px;height:90px;margin:0 auto 20px;border-radius:28px;display:grid;place-items:center;font-size:42px;color:white;background:linear-gradient(145deg,#7baaff,#3658e8);box-shadow:0 12px 30px #4266e83b;animation:float 3s ease-in-out infinite}
-    .passport-hero h1{font-size:clamp(30px,6vw,48px);line-height:1.1;letter-spacing:-1.8px;margin:12px 0}
-    .passport-hero h1 span{color:#4569f5}
-    .passport-hero p{color:#697995;max-width:530px;margin:12px auto}
-    .progress-track{height:7px;border-radius:20px;background:#e3eafa;overflow:hidden;margin:26px 0 10px}
-    .progress-fill{height:100%;width:16.66%;background:linear-gradient(90deg,#4569f5,#62b8ff);border-radius:20px;transition:width .35s}
-    .progress-caption{display:flex;justify-content:space-between;color:#697995;font-size:11px}
-    .step-dots{display:flex;justify-content:center;gap:9px;margin:25px 0;flex-wrap:wrap}
-    .step-dot{width:31px;height:31px;border:1px solid #dce5f5;border-radius:50%;display:grid;place-items:center;background:#fff;color:#697995;font-size:12px;font-weight:800}
-    .step-dot.active{background:#4569f5;color:#fff;border-color:#4569f5}
-    .step-dot.complete{background:#e6efff;color:#3156df;border-color:#c8d8ff}
-    .passport-panel{background:#fff;border:1px solid #e0e8f5;border-radius:22px;padding:clamp(18px,4vw,30px);box-shadow:0 8px 30px #294b8009}
-    .passport-panel h2{font-size:23px;letter-spacing:-.7px;margin:5px 0 8px}
-    .muted{color:#697995;font-size:13px}
-    .field-label{display:block;font-size:12px;font-weight:800;margin:20px 0 8px}
-    .passport-input,.passport-select{width:100%;padding:13px 14px;border:1px solid #dce5f5;border-radius:12px;background:#f9fbff;color:#14213d;outline:none}
-    .passport-input:focus,.passport-select:focus{border-color:#7293ff;box-shadow:0 0 0 3px #7293ff20}
-    .choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-top:15px}
-    .choice{display:flex;gap:9px;align-items:flex-start;padding:13px;border:1px solid #e0e8f5;border-radius:13px;background:#fbfcff;font-size:12px;cursor:pointer}
-    .choice input{margin-top:3px;accent-color:#4569f5}
-    .info-card{border:1px solid #dfe8fb;background:#f4f7ff;padding:15px;border-radius:14px;margin-top:16px}
-    .info-card strong{display:block;font-size:13px;margin-bottom:4px}
-    .info-card p{font-size:12px;color:#697995;margin:0;overflow-wrap:anywhere}
-    .passport-actions{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:22px}
-    .passport-btn{border:0;border-radius:12px;padding:13px 19px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-    .passport-primary{background:linear-gradient(110deg,#3e65ee,#568cff);color:white;box-shadow:0 7px 20px #426cf126}
-    .passport-secondary{background:#edf2ff;border:1px solid #dbe5ff;color:#3458d3}
-    .passport-btn:disabled{opacity:.45;cursor:not-allowed}
-    .passport-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-top:18px}
-    .summary-item{padding:14px;border:1px solid #e0e8f5;border-radius:13px;background:#fbfcff;min-width:0}
-    .summary-item small{display:block;color:#697995;font-size:10px;letter-spacing:.8px;margin-bottom:6px}
-    .summary-item strong{font-size:13px;overflow-wrap:anywhere}
-    .success-mark{font-size:42px;color:#4267e7}
-    .install-list{padding-left:20px;color:#43516b;font-size:13px}
-    .install-list li{padding:6px 0}
-    .status-message{min-height:20px;color:#3156df;font-size:12px;margin-top:12px}
-    .hidden{display:none!important}
-    footer{margin-top:30px}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-    @media(max-width:500px){.passport-page{padding:20px 13px 40px}.passport-hero{padding:28px 14px}.passport-actions .passport-btn{flex:1}.passport-top .brand small{letter-spacing:.6px}}
-    @media(prefers-reduced-motion:reduce){.passport-orb{animation:none}.progress-fill{transition:none}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f8ff">
+<title>Theme Passport | Vivo Theme Store</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.passport{max-width:850px;margin:auto;padding:25px 0 50px}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:25px}
+.back{color:#3658e8;font-weight:800;font-size:13px}
+.intro,.panel{background:#fff;border:1px solid #e0e8f5;border-radius:24px;padding:clamp(20px,5vw,34px);box-shadow:0 12px 35px #294b800c}
+.intro{text-align:center;background:linear-gradient(145deg,#fff,#edf4ff)}
+.orb{width:78px;height:78px;display:grid;place-items:center;margin:0 auto 18px;border-radius:25px;background:linear-gradient(140deg,#80b7ff,#3658e8);color:white;font-size:36px;box-shadow:0 10px 25px #4266e82e}
+.kicker{font-size:10px;letter-spacing:2px;font-weight:850;color:#4267e7}
+h1{font-size:clamp(32px,7vw,49px);letter-spacing:-2px;line-height:1.08;margin:12px 0}
+h1 span{color:#4569f5}
+.muted{color:#697995;font-size:13px;line-height:1.8}
+.track{height:7px;background:#e5ecfa;border-radius:20px;margin:24px 0 8px;overflow:hidden}
+.fill{height:100%;width:16.66%;background:linear-gradient(90deg,#4569f5,#62b8ff);transition:width .3s}
+.progress{display:flex;justify-content:space-between;color:#697995;font-size:11px}
+.dots{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:22px 0}
+.dot{width:31px;height:31px;border:1px solid #dce5f5;background:#fff;color:#697995;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800}
+.dot.active{background:#4569f5;color:white;border-color:#4569f5}
+.dot.done{background:#e6efff;color:#3156df}
+.panel h2{font-size:25px;letter-spacing:-.8px;margin:8px 0}
+.info{background:#f5f8ff;border:1px solid #e0e8f5;border-radius:15px;padding:16px;margin-top:13px;overflow-wrap:anywhere}
+.info small{display:block;color:#697995;font-size:10px;letter-spacing:1px;margin-bottom:6px}
+.info strong{font-size:14px}
+.info p{font-size:12px;color:#697995;margin:6px 0 0}
+.field{display:block;font-size:12px;font-weight:800;margin:20px 0 8px}
+select{width:100%;padding:13px;border:1px solid #dce5f5;border-radius:12px;background:#f9fbff;color:#14213d;font:inherit}
+.checks{display:grid;gap:10px;margin-top:18px}
+.check{display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #e0e8f5;border-radius:13px;background:#fbfcff;font-size:13px}
+.check input{margin-top:4px;accent-color:#4569f5}
+.actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:24px}
+.btn{border:0;border-radius:13px;padding:14px 18px;font-size:13px;font-weight:800;cursor:pointer}
+.primary{background:linear-gradient(110deg,#3e65ee,#568cff);color:white}
+.secondary{background:#edf2ff;color:#3458d3;border:1px solid #dbe5ff}
+.btn:disabled{opacity:.45}
+.status{font-size:12px;color:#3156df;margin-top:12px;min-height:18px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:18px}
+.summary .info{margin:0}
+ol{padding-left:22px;color:#43516b;font-size:13px;line-height:2}
+@media(max-width:480px){.passport{padding-top:16px}.actions .btn{flex:1}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
 </head>
-
 <body>
-  <main class="passport-page">
-    <div class="passport-top">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">V</span>
-        <span>Vivo <b>Theme Store</b><small>YOUR PHONE, YOUR STYLE.</small></span>
-      </a>
-      <a class="back-link" href="index.html">← Back to store</a>
+<main class="passport">
+  <div class="topline">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">V</span>
+      <span>Vivo <b>Theme Store</b><small>YOUR PHONE, YOUR STYLE.</small></span>
+    </a>
+    <a class="back" href="index.html">← Back to store</a>
+  </div>
+
+  <section class="intro">
+    <div class="orb" id="orb">✦</div>
+    <div class="kicker">YOUR PERSONAL THEME GUIDE</div>
+    <h1 id="hero">Your Theme <span>Passport.</span></h1>
+    <p class="muted" id="subtitle">Six useful stages to review your theme and prepare for installation.</p>
+  </section>
+
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <div class="progress"><span id="stageCount">Stage 1 of 6</span><span id="percent">17%</span></div>
+  <div class="dots" id="dots"></div>
+
+  <section class="panel">
+    <div class="kicker" id="stageLabel">STAGE 01</div>
+    <h2 id="heading">Theme Arrival</h2>
+    <div id="content"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn secondary" id="back" type="button" disabled>← Back</button>
+      <button class="btn primary" id="next" type="button">Start →</button>
     </div>
+  </section>
+  <footer><a href="index.html">Vivo Theme Store</a> · Unofficial fan-made showcase</footer>
+</main>
 
-    <section class="passport-hero">
-      <div class="passport-orb" id="heroIcon">✦</div>
-      <div class="passport-label">VIVO THEME EXPERIENCE</div>
-      <h1 id="heroTitle">Your Theme <span>Passport.</span></h1>
-      <p id="heroDescription">A simple guided journey to check your theme details and prepare for installation.</p>
-    </section>
+<script>
+const params = new URLSearchParams(location.search);
+const theme = params.get('title') || 'Vivo Theme';
+const devices = params.get('devices') || 'Not specified by creator';
+let download = '';
+try {
+  const u = new URL(params.get('url') || '');
+  if (u.protocol === 'https:' &&
+      ['drive.google.com','docs.google.com'].includes(u.hostname)) {
+    download = u.href;
+  }
+} catch {}
 
-    <div class="progress-track" aria-label="Progress">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div class="progress-caption">
-      <span id="progressText">Stage 1 of 6</span>
-      <span id="progressPercent">17% complete</span>
-    </div>
-    <div class="step-dots" id="stepDots" aria-label="Passport stages"></div>
+const state = {
+  device: '',
+  backup: false,
+  source: false,
+  compatible: false
+};
+let stage = 0;
 
-    <section class="passport-panel" aria-live="polite">
-      <div id="stageContent"></div>
-      <div class="status-message" id="statusMessage" role="status"></div>
-      <div class="passport-actions">
-        <button class="passport-btn passport-secondary" id="backBtn" type="button" disabled>← Back</button>
-        <button class="passport-btn passport-primary" id="nextBtn" type="button">Begin journey →</button>
-      </div>
-    </section>
+const stages = [
+  ['✦','THEME ARRIVAL','Meet your next setup','Review the selected theme and start your customization journey.','Start journey →'],
+  ['▣','DEVICE MATCH','Choose your device','Select your device family and review the compatibility details supplied with this theme.','Check theme details →'],
+  ['◈','THEME ANATOMY','Understand the package','Review the file type, creator instructions and compatibility before installing.','Prepare my device →'],
+  ['✓','READY CHECK','A quick preparation check','Confirm that you have reviewed the source, backup and compatibility information.','Build my passport →'],
+  ['▤','THEME PASSPORT','Your personal summary','Review the selections you made in this session.','Open download studio →'],
+  ['↓','DOWNLOAD STUDIO','Continue to your theme','Open the supplied file link, if available, and follow the creator’s installation guide.','Finish']
+];
 
-    <footer>
-      <a class="back-link" href="index.html">Vivo Theme Store</a>
-      <span>Unofficial fan-made showcase • Respect creators’ rights.</span>
-    </footer>
-  </main>
+const $ = id => document.getElementById(id);
 
-  <script>
-    const params = new URLSearchParams(location.search);
-    const themeTitle = params.get('title') || 'Vivo Theme';
-    const rawDownload = params.get('url') || '';
-    const devices = params.get('devices') || 'Compatibility not confirmed';
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
 
-    let downloadURL = '';
-    try {
-      const parsed = new URL(rawDownload);
-      if (parsed.protocol === 'https:' &&
-          ['drive.google.com','docs.google.com'].includes(parsed.hostname)) {
-        downloadURL = parsed.href;
-      }
-    } catch {}
+function info(label,value,description='') {
+  return `<div class="info"><small>${esc(label)}</small><strong>${esc(value)}</strong>${description ? `<p>${esc(description)}</p>` : ''}</div>`;
+}
 
-    const stages = [
-      {
-        title: 'Theme <span>Arrival.</span>',
-        description: 'Welcome to your personalized theme journey.',
-        icon: '✦',
-        button: 'Check my device →'
-      },
-      {
-        title: 'Device <span>Match.</span>',
-        description: 'Review the available compatibility information before installing.',
-        icon: '▣',
-        button: 'Explore theme →'
-      },
-      {
-        title: 'Theme <span>Anatomy.</span>',
-        description: 'Understand what you should check in a theme package.',
-        icon: '◈',
-        button: 'Ready check →'
-      },
-      {
-        title: 'Ready <span>Check.</span>',
-        description: 'Confirm that you have reviewed the important preparation steps.',
-        icon: '✓',
-        button: 'Create passport →'
-      },
-      {
-        title: 'Theme <span>Passport.</span>',
-        description: 'Your selected theme and preparation summary.',
-        icon: '▤',
-        button: 'Open download studio →'
-      },
-      {
-        title: 'Download <span>Studio.</span>',
-        description: 'Use the available file link and follow the installation guidance.',
-        icon: '↓',
-        button: 'Finish'
-      }
-    ];
+function drawDots() {
+  $('dots').innerHTML = stages.map((s,i) =>
+    `<span class="dot ${i===stage?'active':i<stage?'done':''}">${i<stage?'✓':i+1}</span>`
+  ).join('');
+}
 
-    let currentStage = 0;
-    const answers = {
-      device: '',
-      backup: false,
-      source: false,
-      compatibility: false
-    };
+function render() {
+  const s = stages[stage];
+  $('orb').textContent = s[0];
+  $('hero').innerHTML = `${esc(s[2].split(' ').slice(0,-1).join(' '))} <span>${esc(s[2].split(' ').slice(-1)[0])}</span>`;
+  $('subtitle').textContent = s[3];
+  $('stageLabel').textContent = `STAGE 0${stage+1} / ${s[1]}`;
+  $('heading').textContent = s[2];
+  $('fill').style.width = ((stage+1)/stages.length*100)+'%';
+  $('stageCount').textContent = `Stage ${stage+1} of ${stages.length}`;
+  $('percent').textContent = Math.round((stage+1)/stages.length*100)+'%';
+  $('back').disabled = stage===0;
+  $('next').textContent = s[4];
+  $('next').disabled = false;
+  $('status').textContent = '';
+  drawDots();
 
-    const stageContent = document.querySelector('#stageContent');
-    const nextBtn = document.querySelector('#nextBtn');
-    const backBtn = document.querySelector('#backBtn');
-    const statusMessage = document.querySelector('#statusMessage');
+  if(stage===0) {
+    $('content').innerHTML =
+      `<p class="muted">Your journey starts here. This guide does not install anything or verify device compatibility automatically.</p>`+
+      info('SELECTED THEME',theme)+info('CREATOR DEVICE NOTES',devices);
+  } else if(stage===1) {
+    $('content').innerHTML = `
+      <p class="muted">Choose the closest device family. This selection is for your reference only.</p>
+      <label class="field" for="device">YOUR DEVICE FAMILY</label>
+      <select id="device">
+        <option value="">Select device family</option>
+        <option>Vivo X Series</option><option>Vivo V Series</option>
+        <option>Vivo Y Series</option><option>iQOO Series</option>
+        <option>Other Android device</option>
+      </select>`+info('CREATOR COMPATIBILITY NOTES',devices);
+    $('device').value = state.device;
+    $('device').addEventListener('change',e=>state.device=e.target.value);
+  } else if(stage===2) {
+    $('content').innerHTML =
+      info('01 · FILE TYPE','Check the downloaded file','Make sure the extension matches the creator’s instructions.')+
+      info('02 · SOFTWARE','Check your OS version','Themes may behave differently across device models and software versions.')+
+      info('03 · TRUSTED SOURCE','Review before opening','Avoid unexpected installers and files from sources you do not trust.');
+  } else if(stage===3) {
+    $('content').innerHTML = `<div class="checks">
+      <label class="check"><input type="checkbox" id="backup" ${state.backup?'checked':''}> I have considered backing up my current setup.</label>
+      <label class="check"><input type="checkbox" id="source" ${state.source?'checked':''}> I trust the source of this theme file.</label>
+      <label class="check"><input type="checkbox" id="compat" ${state.compatible?'checked':''}> I reviewed the available compatibility notes.</label>
+    </div>`;
+    $('backup').addEventListener('change',e=>state.backup=e.target.checked);
+    $('source').addEventListener('change',e=>state.source=e.target.checked);
+    $('compat').addEventListener('change',e=>state.compatible=e.target.checked);
+  } else if(stage===4) {
+    $('content').innerHTML = `<div class="summary">
+      ${info('THEME',theme)}
+      ${info('DEVICE FAMILY',state.device||'Not selected')}
+      ${info('COMPATIBILITY',state.compatible?'Reviewed by you':'Not confirmed')}
+      ${info('BACKUP CHECK',state.backup?'Checked':'Not checked')}
+    </div><p class="muted">This is an informational summary, not an official Vivo certificate or a guarantee of compatibility.</p>`;
+  } else {
+    $('content').innerHTML =
+      info('SELECTED THEME',theme)+
+      (download
+        ? `<div class="info"><small>DOWNLOAD LINK</small><p>Open the supplied Google Drive file and check its details before downloading.</p><a class="btn primary" style="display:inline-block;margin-top:12px" href="${esc(download)}" target="_blank" rel="noopener noreferrer">Open theme link ↗</a></div>`
+        : info('DOWNLOAD NOT PROVIDED','No verified Google Drive link was supplied','Return to the store and check whether a download link is available.'))+
+      `<h2 style="margin-top:22px">Installation guide</h2>
+       <ol><li>Read the creator’s installation instructions.</li>
+       <li>Confirm the file type and device compatibility.</li>
+       <li>Use the theme options supported by your phone.</li>
+       <li>If the instructions do not match your device, stop and check official guidance.</li></ol>`;
+  }
+}
 
-    function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;',
-        '"': '&quot;', "'": '&#39;'
-      })[c]);
-    }
+function advance() {
+  if(stage===1 && !state.device) {
+    $('status').textContent='Please select your device family first.';
+    return;
+  }
+  if(stage===3 && !(state.backup && state.source && state.compatible)) {
+    $('status').textContent='Review and check all three items to continue.';
+    return;
+  }
+  if(stage<5) {
+    stage++;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    $('status').textContent='Theme guide completed. Thank you!';
+    $('next').textContent='✓ Completed';
+    $('next').disabled=true;
+  }
+}
 
-    function drawDots() {
-      document.querySelector('#stepDots').innerHTML = stages.map((s, i) =>
-        `<span class="step-dot ${i === currentStage ? 'active' : i < currentStage ? 'complete' : ''}" aria-label="Stage ${i + 1}">${i < currentStage ? '✓' : i + 1}</span>`
-      ).join('');
-    }
-
-    function updateHeader() {
-      const stage = stages[currentStage];
-      document.querySelector('#heroTitle').innerHTML = stage.title;
-      document.querySelector('#heroDescription').textContent = stage.description;
-      document.querySelector('#heroIcon').textContent = stage.icon;
-      document.querySelector('#progressFill').style.width =
-        ((currentStage + 1) / stages.length * 100) + '%';
-      document.querySelector('#progressText').textContent =
-        `Stage ${currentStage + 1} of ${stages.length}`;
-      document.querySelector('#progressPercent').textContent =
-        Math.round((currentStage + 1) / stages.length * 100) + '% complete';
-      backBtn.disabled = currentStage === 0;
-      nextBtn.textContent = stage.button;
-      drawDots();
-    }
-
-    function renderStage() {
-      statusMessage.textContent = '';
-      updateHeader();
-
-      if (currentStage === 0) {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 01 · ARRIVAL</div>
-          <h2>Welcome to your theme journey</h2>
-          <p class="muted">Selected theme details are shown below. This page does not install anything automatically.</p>
-          <div class="info-card">
-            <strong>Selected theme</strong>
-            <p>${escapeHTML(themeTitle)}</p>
-          </div>
-          <div class="info-card">
-            <strong>Compatibility information</strong>
-            <p>${escapeHTML(devices)}</p>
-          </div>`;
-      } else if (currentStage === 1) {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 02 · DEVICE MATCH</div>
-          <h2>Which device do you use?</h2>
-          <p class="muted">Choose the closest match. This selection does not verify compatibility automatically.</p>
-          <label class="field-label" for="deviceSelect">Your device family</label>
-          <select class="passport-select" id="deviceSelect">
-            <option value="">Select device family</option>
-            <option>Vivo X Series</option>
-            <option>Vivo V Series</option>
-            <option>Vivo Y Series</option>
-            <option>iQOO Series</option>
-            <option>Other Android device</option>
-          </select>
-          <div class="info-card">
-            <strong>Creator-provided compatibility</strong>
-            <p>${escapeHTML(devices)}</p>
-          </div>`;
-        document.querySelector('#deviceSelect').value = answers.device;
-        document.querySelector('#deviceSelect').addEventListener('change', e => {
-          answers.device = e.target.value;
-        });
-      } else if (currentStage === 2) {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 03 · THEME ANATOMY</div>
-          <h2>Know what you're installing</h2>
-          <p class="muted">Theme formats and installation steps vary by device, operating system and source.</p>
-          <div class="info-card"><strong>01 · File format</strong><p>Check the downloaded file extension and make sure it matches the creator's instructions.</p></div>
-          <div class="info-card"><strong>02 · Compatibility</strong><p>Confirm your exact model and software version against the creator's information.</p></div>
-          <div class="info-card"><strong>03 · Trusted source</strong><p>Only use a file from a source you trust. Avoid installers or apps you did not expect.</p></div>`;
-      } else if (currentStage === 3) {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 04 · READY CHECK</div>
-          <h2>Before you continue</h2>
-          <p class="muted">Tick each item after reviewing it. You can go back and change your device selection.</p>
-          <div class="choice-grid">
-            <label class="choice"><input type="checkbox" id="backupCheck" ${answers.backup ? 'checked' : ''}> I have considered backing up my current setup.</label>
-            <label class="choice"><input type="checkbox" id="sourceCheck" ${answers.source ? 'checked' : ''}> I trust the source of the theme file.</label>
-            <label class="choice"><input type="checkbox" id="compatCheck" ${answers.compatibility ? 'checked' : ''}> I have reviewed the compatibility information.</label>
-          </div>`;
-        document.querySelector('#backupCheck').addEventListener('change', e => answers.backup = e.target.checked);
-        document.querySelector('#sourceCheck').addEventListener('change', e => answers.source = e.target.checked);
-        document.querySelector('#compatCheck').addEventListener('change', e => answers.compatibility = e.target.checked);
-      } else if (currentStage === 4) {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 05 · YOUR SUMMARY</div>
-          <div class="success-mark">✦</div>
-          <h2>Your Theme Passport</h2>
-          <p class="muted">This is a local summary of the choices you made during this session.</p>
-          <div class="passport-summary">
-            <div class="summary-item"><small>THEME</small><strong>${escapeHTML(themeTitle)}</strong></div>
-            <div class="summary-item"><small>DEVICE FAMILY</small><strong>${escapeHTML(answers.device || 'Not selected')}</strong></div>
-            <div class="summary-item"><small>COMPATIBILITY</small><strong>${answers.compatibility ? 'Reviewed by you' : 'Not confirmed'}</strong></div>
-            <div class="summary-item"><small>BACKUP CHECK</small><strong>${answers.backup ? 'Checked' : 'Not checked'}</strong></div>
-          </div>
-          <div class="info-card"><strong>Important</strong><p>This passport is not an official Vivo certificate and does not guarantee that the theme will work on your device.</p></div>`;
-      } else {
-        stageContent.innerHTML = `
-          <div class="passport-label">STAGE 06 · DOWNLOAD & INSTALL</div>
-          <h2>You're ready to continue</h2>
-          <p class="muted">Follow the creator's instructions for your exact device. Availability of a download depends on the link supplied for this theme.</p>
-          <div class="info-card">
-            <strong>Selected theme</strong>
-            <p>${escapeHTML(themeTitle)}</p>
-          </div>
-          ${downloadURL
-            ? `<a class="passport-btn passport-primary" style="margin-top:18px" href="${escapeHTML(downloadURL)}" target="_blank" rel="noopener noreferrer">↓ Open theme download</a>`
-            : `<div class="info-card"><strong>No verified download link supplied</strong><p>Return to the store and check whether a download link is available for this theme.</p></div>`}
-          <h2 style="margin-top:25px">Installation guidance</h2>
-          <ol class="install-list">
-            <li>Read the theme creator's instructions first.</li>
-            <li>Confirm the file type and device compatibility.</li>
-            <li>Use your phone's supported theme or file-management options.</li>
-            <li>If the steps differ on your device, stop and consult the official device guidance.</li>
-          </ol>`;
-      }
-    }
-
-    function canContinue() {
-      if (currentStage === 1 && !answers.device) {
-        statusMessage.textContent = 'Please select your device family first.';
-        return false;
-      }
-
-      if (currentStage === 3 &&
-          !(answers.backup && answers.source && answers.compatibility)) {
-        statusMessage.textContent = 'Please review and check all three items before continuing.';
-        return false;
-      }
-
-      return true;
-    }
-
-    nextBtn.addEventListener('click', () => {
-      if (!canContinue()) return;
-
-      if (currentStage < stages.length - 1) {
-        currentStage++;
-        renderStage();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        statusMessage.textContent = 'Theme Passport journey complete. Thank you!';
-        nextBtn.disabled = true;
-        nextBtn.textContent = '✓ Completed';
-      }
-    });
-
-    backBtn.addEventListener('click', () => {
-      if (currentStage > 0) {
-        currentStage--;
-        renderStage();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    renderStage();
-  </script>
+$('next').addEventListener('click',advance);
+$('back').addEventListener('click',()=>{
+  if(stage>0){stage--;render();window.scrollTo({top:0,behavior:'smooth'});}
+});
+render();
+</script>
 </body>
 </html>
