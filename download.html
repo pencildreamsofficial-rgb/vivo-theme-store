@@ -31,7 +31,8 @@ h1 span{color:#4569f5}
 .info strong{font-size:14px}
 .info p{font-size:12px;color:#697995;margin:6px 0 0}
 .field{display:block;font-size:12px;font-weight:800;margin:20px 0 8px}
-select{width:100%;padding:13px;border:1px solid #dce5f5;border-radius:12px;background:#f9fbff;color:#14213d;font:inherit}
+select,.device-input{width:100%;padding:13px;border:1px solid #dce5f5;border-radius:12px;background:#f9fbff;color:#14213d;font:inherit}
+.device-input{margin-top:0}
 .checks{display:grid;gap:10px;margin-top:18px}
 .check{display:flex;align-items:flex-start;gap:10px;padding:14px;border:1px solid #e0e8f5;border-radius:13px;background:#fbfcff;font-size:13px}
 .check input{margin-top:4px;accent-color:#4569f5}
@@ -86,6 +87,7 @@ ol{padding-left:22px;color:#43516b;font-size:13px;line-height:2}
 const params = new URLSearchParams(location.search);
 const theme = params.get('title') || 'Vivo Theme';
 const devices = params.get('devices') || 'Not specified by creator';
+
 let download = '';
 try {
   const u = new URL(params.get('url') || '');
@@ -96,16 +98,18 @@ try {
 } catch {}
 
 const state = {
-  device: '',
+  series: '',
+  deviceName: '',
   backup: false,
   source: false,
   compatible: false
 };
+
 let stage = 0;
 
 const stages = [
   ['✦','THEME ARRIVAL','Meet your next setup','Review the selected theme and start your customization journey.','Start journey →'],
-  ['▣','DEVICE MATCH','Choose your device','Select your device family and review the compatibility details supplied with this theme.','Check theme details →'],
+  ['▣','DEVICE MATCH','Choose your device','Select your device series and enter your exact phone model.','Check theme details →'],
   ['◈','THEME ANATOMY','Understand the package','Review the file type, creator instructions and compatibility before installing.','Prepare my device →'],
   ['✓','READY CHECK','A quick preparation check','Confirm that you have reviewed the source, backup and compatibility information.','Build my passport →'],
   ['▤','THEME PASSPORT','Your personal summary','Review the selections you made in this session.','Open download studio →'],
@@ -150,42 +154,73 @@ function render() {
     $('content').innerHTML =
       `<p class="muted">Your journey starts here. This guide does not install anything or verify device compatibility automatically.</p>`+
       info('SELECTED THEME',theme)+info('CREATOR DEVICE NOTES',devices);
+
   } else if(stage===1) {
     $('content').innerHTML = `
-      <p class="muted">Choose the closest device family. This selection is for your reference only.</p>
-      <label class="field" for="device">YOUR DEVICE FAMILY</label>
-      <select id="device">
-        <option value="">Select device family</option>
-        <option>Vivo X Series</option><option>Vivo V Series</option>
-        <option>Vivo Y Series</option><option>iQOO Series</option>
-        <option>Other Android device</option>
-      </select>`+info('CREATOR COMPATIBILITY NOTES',devices);
-    $('device').value = state.device;
-    $('device').addEventListener('change',e=>state.device=e.target.value);
+      <p class="muted">Select your phone's series and enter its exact model name. These details are saved in your Theme Passport.</p>
+
+      <label class="field" for="series">DEVICE SERIES</label>
+      <select id="series" required>
+        <option value="">Select device series</option>
+        <option value="Vivo X Series">Vivo X Series</option>
+        <option value="Vivo V Series">Vivo V Series</option>
+        <option value="Vivo Y Series">Vivo Y Series</option>
+        <option value="Vivo T Series">Vivo T Series</option>
+        <option value="iQOO Series">iQOO Series</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label class="field" for="deviceName">DEVICE NAME / MODEL</label>
+      <input class="device-input" id="deviceName" type="text"
+        maxlength="80" placeholder="e.g. Vivo V30 Pro"
+        autocomplete="off" required>
+
+      <p class="muted">Enter the model name exactly as shown in your phone's Settings → About phone.</p>
+      ${info('CREATOR COMPATIBILITY NOTES',devices)}
+    `;
+
+    $('series').value = state.series;
+    $('deviceName').value = state.deviceName;
+
+    $('series').addEventListener('change',e=>{
+      state.series=e.target.value;
+    });
+
+    $('deviceName').addEventListener('input',e=>{
+      state.deviceName=e.target.value;
+    });
+
   } else if(stage===2) {
     $('content').innerHTML =
       info('01 · FILE TYPE','Check the downloaded file','Make sure the extension matches the creator’s instructions.')+
       info('02 · SOFTWARE','Check your OS version','Themes may behave differently across device models and software versions.')+
       info('03 · TRUSTED SOURCE','Review before opening','Avoid unexpected installers and files from sources you do not trust.');
+
   } else if(stage===3) {
     $('content').innerHTML = `<div class="checks">
       <label class="check"><input type="checkbox" id="backup" ${state.backup?'checked':''}> I have considered backing up my current setup.</label>
       <label class="check"><input type="checkbox" id="source" ${state.source?'checked':''}> I trust the source of this theme file.</label>
       <label class="check"><input type="checkbox" id="compat" ${state.compatible?'checked':''}> I reviewed the available compatibility notes.</label>
     </div>`;
+
     $('backup').addEventListener('change',e=>state.backup=e.target.checked);
     $('source').addEventListener('change',e=>state.source=e.target.checked);
     $('compat').addEventListener('change',e=>state.compatible=e.target.checked);
+
   } else if(stage===4) {
     $('content').innerHTML = `<div class="summary">
       ${info('THEME',theme)}
-      ${info('DEVICE FAMILY',state.device||'Not selected')}
+      ${info('DEVICE SERIES',state.series||'Not selected')}
+      ${info('DEVICE NAME',state.deviceName||'Not entered')}
       ${info('COMPATIBILITY',state.compatible?'Reviewed by you':'Not confirmed')}
       ${info('BACKUP CHECK',state.backup?'Checked':'Not checked')}
     </div><p class="muted">This is an informational summary, not an official Vivo certificate or a guarantee of compatibility.</p>`;
+
   } else {
     $('content').innerHTML =
       info('SELECTED THEME',theme)+
+      info('DEVICE SERIES',state.series||'Not selected')+
+      info('DEVICE NAME',state.deviceName||'Not entered')+
       (download
         ? `<div class="info"><small>DOWNLOAD LINK</small><p>Open the supplied Google Drive file and check its details before downloading.</p><a class="btn primary" style="display:inline-block;margin-top:12px" href="${esc(download)}" target="_blank" rel="noopener noreferrer">Open theme link ↗</a></div>`
         : info('DOWNLOAD NOT PROVIDED','No verified Google Drive link was supplied','Return to the store and check whether a download link is available.'))+
@@ -198,14 +233,27 @@ function render() {
 }
 
 function advance() {
-  if(stage===1 && !state.device) {
-    $('status').textContent='Please select your device family first.';
-    return;
+  if(stage===1) {
+    state.series=$('series').value;
+    state.deviceName=$('deviceName').value.trim();
+
+    if(!state.series) {
+      $('status').textContent='Please select your device series first.';
+      return;
+    }
+
+    if(!state.deviceName) {
+      $('status').textContent='Please enter your device name/model.';
+      $('deviceName').focus();
+      return;
+    }
   }
+
   if(stage===3 && !(state.backup && state.source && state.compatible)) {
     $('status').textContent='Review and check all three items to continue.';
     return;
   }
+
   if(stage<5) {
     stage++;
     render();
@@ -218,9 +266,15 @@ function advance() {
 }
 
 $('next').addEventListener('click',advance);
+
 $('back').addEventListener('click',()=>{
-  if(stage>0){stage--;render();window.scrollTo({top:0,behavior:'smooth'});}
+  if(stage>0) {
+    stage--;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 });
+
 render();
 </script>
 </body>
