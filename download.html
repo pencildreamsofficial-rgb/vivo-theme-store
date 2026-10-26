@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theme Download | Vivo Theme Store</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080610;color:#f5f0ff;font-family:Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:20px}
+.card{width:100%;max-width:480px;background:#151020;border:1px solid #49316b;border-radius:22px;padding:26px;text-align:center;box-shadow:0 0 30px #7027b522}
+.logo{color:#c084fc;font-weight:bold;letter-spacing:2px}
+h1{font-size:26px}
+.sub{color:#b9adc9;line-height:1.6}
+.step{display:flex;gap:14px;text-align:left;align-items:flex-start;background:#21172f;border-radius:14px;padding:14px;margin:14px 0}
+.num{background:#7138a5;border-radius:50%;min-width:34px;height:34px;display:grid;place-items:center;font-weight:bold}
+.step p{margin:5px 0;color:#c9bdd8;line-height:1.5;font-size:14px}
+button,.download{display:block;width:100%;border:0;border-radius:12px;padding:15px;background:#a855f7;color:white;font-weight:bold;font-size:16px;text-decoration:none;cursor:pointer;margin-top:18px}
+button:disabled{opacity:.45;cursor:not-allowed}
+#status{color:#c084fc;font-size:13px;margin-top:12px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="logo">VIVO THEME STORE</div>
+<h1>Theme Download</h1>
+<p class="sub">Follow these 3 simple steps to get your theme.</p>
+
+<section id="steps">
+<div class="step"><div class="num">1</div><div><b>Check compatibility</b><p>Confirm that the theme supports your Vivo or iQOO device and OS version.</p></div></div>
+<div class="step"><div class="num">2</div><div><b>Read installation instructions</b><p>Follow the installation instructions provided with the theme.</p></div></div>
+<div class="step"><div class="num">3</div><div><b>Ready to download</b><p>Tap Continue to reveal the final download button.</p></div></div>
+<button id="continueBtn">Continue</button>
+</section>
+
+<section id="final" class="hidden">
+<div class="step"><div class="num">4</div><div><b>Your download link</b><p>Tap below to open the Google Drive file.</p></div></div>
+<a id="downloadBtn" class="download" href="#" target="_blank" rel="noopener">Download Theme</a>
+</section>
+<p id="status"></p>
+</main>
+<script>
+const params=new URLSearchParams(location.search);
+const raw=params.get("url");
+const status=document.getElementById("status");
+let driveURL=null;
+
+try{
+ const u=new URL(raw);
+ if(u.protocol==="https:" &&
+   (u.hostname==="drive.google.com" ||
+    u.hostname==="docs.google.com")){
+   driveURL=u.href;
+ }
+}catch(e){}
+
+document.getElementById("continueBtn").addEventListener("click",()=>{
+ if(!driveURL){
+   status.textContent="Download link missing or invalid. Please contact the website owner.";
+   return;
+ }
+ document.getElementById("steps").classList.add("hidden");
+ document.getElementById("final").classList.remove("hidden");
+ document.getElementById("downloadBtn").href=driveURL;
+ status.textContent="You're ready to download!";
+});
+</script>
+</body>
+</html>
