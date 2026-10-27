@@ -1190,3 +1190,39 @@ html[data-theme="dark"] input, html[data-theme="dark"] textarea, html[data-theme
   .video-card, .card, .theme-card, .product-card, .item-card { min-width: 0; }
   .thumb { aspect-ratio: 16 / 9; }
 }
+
+/* Fix video thumbnail black space */
+.video-card .thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  overflow: hidden;
+  background: #151515;
+}
+
+.video-card .thumb > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.video-card .thumb .play {
+  position: absolute;
+  z-index: 2;
+}
+
+.video-card .thumb .thumb-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
