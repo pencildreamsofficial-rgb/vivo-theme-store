@@ -1,4 +1,3 @@
-
 (() => {
   const $ = (s) => document.querySelector(s);
 
@@ -22,7 +21,6 @@
   menuBtn?.addEventListener('click', openMenu);
   closeMenu?.addEventListener('click', shutMenu);
   scrim?.addEventListener('click', shutMenu);
-
   sidebar?.querySelectorAll('a').forEach(a =>
     a.addEventListener('click', shutMenu)
   );
@@ -33,7 +31,6 @@
 
   searchBtn?.addEventListener('click', () => {
     searchWrap?.classList.toggle('active');
-
     if (searchWrap?.classList.contains('active')) {
       searchInput?.focus();
     }
@@ -42,7 +39,7 @@
   $('#clearSearch')?.addEventListener('click', () => {
     if (searchInput) {
       searchInput.value = '';
-      searchInput.dispatchEvent(new Event('input'));
+      render();
       searchInput.focus();
     }
   });
@@ -51,30 +48,37 @@
   let allResources = [];
 
   function ytId(url = '') {
-    const match = url.match(
+    const match = String(url).match(
       /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/
     );
-
     return match ? match[1] : '';
   }
 
-  // Only these 3 real video IDs will be displayed.
-  const realVideoIds = [
-    'video-1792930144908',
-    'video-1792903968525',
-    'video-1792902171007'
-  ];
+  // Only remove known demo cards and obvious placeholder content.
+  // Real videos added later to Members or Live will still work.
+  const fakeTitles = new Set([
+    'originos theme preview',
+    'minimal funtouch os setup',
+    'purple amoled theme',
+    'members theme collection',
+    'live theme q&a'
+  ]);
 
-  function isDemo(item) {
-    const text = [
-      item.title,
-      item.description,
-      item.url,
-      item.video,
-      item.download
-    ].join(' ').toLowerCase();
+  function isDemo(item = {}) {
+    const title = String(item.title || '').trim().toLowerCase();
 
-    return /demo|sample|placeholder|replace-with|example\.com/.test(text);
+    const description = String(item.description || '').toLowerCase();
+    const url = String(item.url || item.video || '').toLowerCase();
+    const download = String(item.download || '').toLowerCase();
+
+    if (fakeTitles.has(title)) return true;
+
+    return (
+      /\bdemo\b|\bsample\b|\bplaceholder\b/.test(title + ' ' + description) ||
+      /\breplace\s+with\b|replace-with|example\.com/.test(
+        description + ' ' + url + ' ' + download
+      )
+    );
   }
 
   function card(v) {
@@ -87,7 +91,8 @@
       v.category,
       v.section,
       v.tag,
-      v.device
+      v.device,
+      v.os
     ].join(' ').toLowerCase();
 
     const videoUrl = v.url || v.video || '#';
@@ -114,7 +119,7 @@
       img.onerror = () => {
         if (id && !img.dataset.fallback) {
           img.dataset.fallback = '1';
-          img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+          img.src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
         } else {
           img.remove();
 
@@ -163,10 +168,9 @@
     watch.target = '_blank';
     watch.rel = 'noopener noreferrer';
     watch.textContent = '▶ Watch';
-
     actions.append(watch);
 
-    const downloadUrl = v.download || '';
+    const downloadUrl = String(v.download || '').trim();
 
     if (
       /^https:\/\//i.test(downloadUrl) &&
@@ -174,11 +178,14 @@
     ) {
       const download = document.createElement('a');
       download.className = 'btn ghost';
-      download.href =
-        'download.html?title=' + encodeURIComponent(v.title || 'Theme') +
-        '&url=' + encodeURIComponent(downloadUrl) +
-        '&devices=' + encodeURIComponent(v.device || 'Vivo & iQOO');
 
+      const params = new URLSearchParams({
+        title: v.title || 'Theme',
+        url: downloadUrl,
+        devices: v.device || 'Vivo & iQOO'
+      });
+
+      download.href = `download.html?${params.toString()}`;
       download.textContent = '↓ Theme ZIP';
       actions.append(download);
     }
@@ -201,11 +208,11 @@
     };
 
     Object.values(groups).forEach(group => {
-      if (group) group.innerHTML = '';
+      if (group) group.replaceChildren();
     });
 
     allVideos.forEach(video => {
-      const rawCategory = (
+      const rawCategory = String(
         video.section || video.category || 'latest'
       ).toLowerCase();
 
@@ -214,13 +221,15 @@
         premium: 'premium',
         members: 'members',
         member: 'members',
+        'member-only': 'members',
+        'members-only': 'members',
         live: 'live',
         widgets: 'widgets',
         widget: 'widgets'
       };
 
       const section = categoryAliases[rawCategory] || 'latest';
-      const target = groups[section] || groups.latest;
+      const target = groups[section];
 
       if (!target) return;
 
@@ -267,7 +276,7 @@
     const communityGrid = $('#communityGrid');
 
     if (communityGrid) {
-      communityGrid.innerHTML = '';
+      communityGrid.replaceChildren();
 
       (window.storeData?.posts || []).forEach(post => {
         const searchable = [
@@ -302,20 +311,16 @@
       if (!response.ok) {
         throw new Error('Could not load videos.json');
       }
-
       return response.json();
     })
     .then(data => {
       window.storeData = data;
 
-      // FIX: Display only the 3 known real videos.
       allVideos = (data.videos || []).filter(video =>
-        realVideoIds.includes(video.id) &&
         !isDemo(video) &&
-        (video.url || video.video)
+        Boolean(video.url || video.video)
       );
 
-      // Hide sample resources as well.
       allResources = (data.resources || []).filter(resource =>
         !isDemo(resource)
       );
@@ -348,3 +353,4 @@
       });
     });
 })();
+
