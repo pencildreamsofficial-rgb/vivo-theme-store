@@ -1,255 +1,31 @@
-const $ = selector => document.querySelector(selector);
-
-let allVideos = [];
-
-const sidebar = $('#sidebar');
-const scrim = $('#scrim');
-const searchInput = $('#searchInput');
-
-function menu(open) {
-  sidebar.classList.toggle('open', open);
-  scrim.classList.toggle('show', open);
-}
-
-$('#menuBtn').addEventListener('click', () => menu(true));
-$('#closeMenu').addEventListener('click', () => menu(false));
-scrim.addEventListener('click', () => menu(false));
-
-sidebar.querySelectorAll('nav a').forEach(link => {
-  link.addEventListener('click', () => menu(false));
-});
-
-$('#searchBtn').addEventListener('click', () => {
-  const wrap = $('#searchWrap');
-  wrap.classList.toggle('visible');
-
-  if (wrap.classList.contains('visible')) {
-    searchInput.focus();
-  } else {
-    searchInput.value = '';
-    render();
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const menuBtn=$('#menuBtn'), closeMenu=$('#closeMenu'), sidebar=$('#sidebar'), scrim=$('#scrim');
+  const openMenu=()=>{sidebar?.classList.add('open');scrim?.classList.add('show');document.body.classList.add('menu-open');};
+  const shutMenu=()=>{sidebar?.classList.remove('open');scrim?.classList.remove('show');document.body.classList.remove('menu-open');};
+  menuBtn?.addEventListener('click',openMenu); closeMenu?.addEventListener('click',shutMenu); scrim?.addEventListener('click',shutMenu);
+  sidebar?.querySelectorAll('a').forEach(a=>a.addEventListener('click',shutMenu));
+  const searchWrap=$('#searchWrap'), searchBtn=$('#searchBtn'), searchInput=$('#searchInput');
+  searchBtn?.addEventListener('click',()=>{searchWrap?.classList.toggle('active'); if(searchWrap?.classList.contains('active')) searchInput?.focus();});
+  $('#clearSearch')?.addEventListener('click',()=>{if(searchInput){searchInput.value='';searchInput.dispatchEvent(new Event('input'));searchInput.focus();}});
+  let allVideos=[];
+  function ytId(url=''){let m=url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);return m?m[1]:'';}
+  function card(v){
+    const a=document.createElement('article');a.className='video-card';a.dataset.search=[v.title,v.description,v.category,v.tag].join(' ').toLowerCase();
+    const link=document.createElement('a');link.href=v.url||'#';link.target='_blank';link.rel='noopener noreferrer';link.setAttribute('aria-label','Watch '+(v.title||'video'));
+    const thumb=document.createElement('div');thumb.className='thumb';
+    let src=v.thumbnail||'';const id=ytId(v.url||'');if(!src&&id)src=`https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+    if(src){const img=document.createElement('img');img.src=src;img.alt=v.title||'Video thumbnail';img.loading='lazy';img.onerror=()=>{if(id&&!img.dataset.fallback){img.dataset.fallback='1';img.src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;}else{img.remove();thumb.insertAdjacentHTML('afterbegin','<div class="thumb-fallback">VIVO<br>THEME STORE</div>');}};thumb.append(img);}else thumb.innerHTML='<div class="thumb-fallback">VIVO<br>THEME STORE</div>';
+    const play=document.createElement('span');play.className='play';play.textContent='▶ PLAY';thumb.append(play);link.append(thumb);a.append(link);
+    const body=document.createElement('div');body.className='card-body';const h=document.createElement('h3');h.textContent=v.title||'Untitled video';const p=document.createElement('p');p.textContent=v.description||'';body.append(h,p);
+    const actions=document.createElement('div');actions.className='card-actions';const watch=document.createElement('a');watch.className='btn primary';watch.href=v.url||'#';watch.target='_blank';watch.rel='noopener noreferrer';watch.textContent='▶ Watch';actions.append(watch);
+    if(v.download&&/^https:\/\//i.test(v.download)&&!v.download.includes('example.com')){const dl=document.createElement('a');dl.className='btn ghost';dl.href='download.html?title='+encodeURIComponent(v.title||'Theme')+'&url='+encodeURIComponent(v.download)+'&devices='+encodeURIComponent(v.device||'Vivo & iQOO');dl.textContent='↓ Theme ZIP';actions.append(dl);}
+    body.append(actions);a.append(body);return a;
   }
-});
-
-$('#clearSearch').addEventListener('click', () => {
-  searchInput.value = '';
-  searchInput.focus();
-  render();
-});
-
-searchInput.addEventListener('input', render);
-
-function safe(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[char]);
-}
-
-function getYoutubeId(raw) {
-  try {
-    const url = new URL(raw);
-
-    if (url.hostname === 'youtu.be') {
-      return url.pathname.split('/').filter(Boolean)[0] || '';
-    }
-
-    if (
-      url.hostname === 'youtube.com' ||
-      url.hostname.endsWith('.youtube.com')
-    ) {
-      if (url.searchParams.get('v')) {
-        return url.searchParams.get('v');
-      }
-
-      const match = url.pathname.match(
-        /^\/(?:shorts|embed|live|v)\/([^/?]+)/
-      );
-
-      return match ? match[1] : '';
-    }
-  } catch {}
-
-  return '';
-}
-
-function validHttpUrl(raw) {
-  try {
-    const url = new URL(raw);
-    return url.protocol === 'https:' || url.protocol === 'http:';
-  } catch {
-    return false;
+  function render(){const q=(searchInput?.value||'').trim().toLowerCase();const groups={latest:$('#latestGrid'),premium:$('#premiumGrid'),members:$('#membersGrid'),live:$('#liveGrid'),widgets:$('#widgetsGrid')};Object.values(groups).forEach(g=>{if(g)g.innerHTML='';});
+    allVideos.forEach(v=>{const section=(v.section||(['latest','premium','members','live'].includes(v.category)?v.category:'latest')).toLowerCase();const target=groups[section]||groups.latest;if(!target)return;const c=card(v);if(!q||c.dataset.search.includes(q))target.append(c);});
+    const cg=$('#communityGrid');if(cg){cg.innerHTML='';(window.storeData?.posts||[]).forEach(p=>{if(q&&!(p.title+' '+p.text).toLowerCase().includes(q))return;const a=document.createElement('a');a.className='community-card';a.href=p.url||'#';a.target='_blank';a.rel='noopener noreferrer';const h=document.createElement('h3');h.textContent=p.title;const t=document.createElement('p');t.textContent=p.text;a.append(h,t);cg.append(a);});}
   }
-}
-
-function card(video) {
-  const title = video.title || 'Untitled video';
-  const description =
-    video.description || 'Vivo & iQOO customization';
-
-  const youtubeId = getYoutubeId(video.url || '');
-
-  const thumbnailUrl =
-    video.thumbnail ||
-    (youtubeId
-      ? `https://img.youtube.com/vi/${encodeURIComponent(youtubeId)}/hqdefault.jpg`
-      : '');
-
-  const thumbnail = validHttpUrl(thumbnailUrl)
-    ? `<img src="${safe(thumbnailUrl)}"
-         alt="${safe(title)} thumbnail"
-         loading="lazy"
-         onerror="this.style.display='none'">`
-    : `<div class="thumb-fallback">VIVO<br>THEMES</div>`;
-
-  const watch = validHttpUrl(video.url || '')
-    ? `<a class="small-btn"
-         href="${safe(video.url)}"
-         target="_blank"
-         rel="noopener noreferrer">▶ Watch</a>`
-    : '';
-
-  const downloadUrl = validHttpUrl(video.download || '')
-    ? video.download
-    : '';
-
-  const detailsUrl =
-    'download.html?url=' + encodeURIComponent(downloadUrl) +
-    '&title=' + encodeURIComponent(title) +
-    '&devices=' + encodeURIComponent(
-      video.devices ||
-      video.description ||
-      'Check theme compatibility'
-    );
-
-  const downloadButton = downloadUrl
-    ? `<a class="small-btn secondary"
-         href="${safe(detailsUrl)}">↓ Theme ZIP</a>`
-    : '';
-
-  return `
-    <article class="video-card">
-      <a href="${safe(validHttpUrl(video.url || '') ? video.url : '#')}"
-         ${validHttpUrl(video.url || '')
-           ? 'target="_blank" rel="noopener noreferrer"'
-           : ''}
-         aria-label="Watch ${safe(title)}">
-        <div class="thumb">
-          ${thumbnail}
-          <span class="play">▶ PLAY</span>
-        </div>
-      </a>
-
-      <div class="card-body">
-        <div class="card-tag">
-          ${safe(video.tag || video.category || 'VIVO THEME')}
-        </div>
-
-        <h3>${safe(title)}</h3>
-        <p>${safe(description)}</p>
-
-        <div class="card-actions">
-          ${watch}
-          ${downloadButton}
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-function render() {
-  const query = searchInput.value.trim().toLowerCase();
-
-  const filtered = allVideos.filter(video => {
-    const searchable = [
-      video.title,
-      video.description,
-      video.category,
-      video.tag,
-      video.devices
-    ].join(' ').toLowerCase();
-
-    return !query || searchable.includes(query);
-  });
-
-  const groups = {
-    latest: ['latestGrid', 'latest'],
-    premium: ['premiumGrid', 'premium'],
-    members: ['membersGrid', 'members'],
-    live: ['liveGrid', 'live'],
-    widgets: ['widgetsGrid', 'widgets']
-  };
-
-  for (const [gridId, category] of Object.values(groups)) {
-    const grid = $('#' + gridId);
-
-    const videos = filtered.filter(video =>
-      String(video.category || 'latest').toLowerCase() === category
-    );
-
-    grid.innerHTML = videos.length
-      ? videos.map(card).join('')
-      : `<div class="empty">${
-          query
-            ? 'No matches found. Try another search.'
-            : 'Videos will appear here when you add them in videos.json.'
-        }</div>`;
-  }
-
-  const posts = (window.storeData?.community || []).filter(post => {
-    const text = String(post.text || '').toLowerCase();
-    return !query || text.includes(query);
-  });
-
-  $('#communityGrid').innerHTML = posts.length
-    ? posts.map(post => `
-        <article class="community-card">
-          <p>${safe(post.text || '')}</p>
-          <small>${safe(post.date || 'Community update')}</small>
-        </article>
-      `).join('')
-    : `<div class="empty">Community updates will appear here.</div>`;
-}
-
-async function loadStore() {
-  try {
-    const response = await fetch('videos.json', {
-      cache: 'no-cache'
-    });
-
-    if (!response.ok) {
-      throw new Error('Unable to load videos.json');
-    }
-
-    const data = await response.json();
-
-    window.storeData =
-      data && typeof data === 'object' ? data : {};
-
-    allVideos = Array.isArray(window.storeData.videos)
-      ? window.storeData.videos.filter(
-          video => video && typeof video === 'object'
-        )
-      : [];
-
-    const telegram = window.storeData.settings?.telegram;
-
-    if (validHttpUrl(telegram || '')) {
-      $('#telegramLink').href = telegram;
-      $('#footerTelegram').href = telegram;
-    }
-  } catch (error) {
-    console.error('Vivo Theme Store loading error:', error);
-
-    allVideos = [];
-    window.storeData = { community: [] };
-  }
-
-  render();
-}
-
-loadStore();
-
+  searchInput?.addEventListener('input',render);
+  fetch('videos.json').then(r=>{if(!r.ok)throw Error('Could not load videos.json');return r.json();}).then(data=>{window.storeData=data;allVideos=data.videos||[];const tg=data.settings?.telegram||'#';['telegramLink','footerTelegram'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=tg;});const resources=data.resources||[];const wg=$('#widgetsGrid');if(wg){resources.forEach(r=>{const a=document.createElement('a');a.className='video-card resource-card';a.href=r.url||'#';a.target='_blank';a.rel='noopener noreferrer';const b=document.createElement('div');b.className='card-body';const h=document.createElement('h3');h.textContent=(r.icon||'✧')+' '+r.title;const p=document.createElement('p');p.textContent=r.description||'';b.append(h,p);a.append(b);wg.append(a);});}render();}).catch(err=>{console.error(err);['latestGrid','premiumGrid','membersGrid','liveGrid'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<p class="notice">Could not load videos. Please check videos.json.</p>';});});
+})();

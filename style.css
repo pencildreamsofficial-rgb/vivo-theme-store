@@ -1139,61 +1139,54 @@ footer a {
     animation: none !important;
   }
    }
+   
 
 
-/* ---------- Homepage alignment safety patch ---------- */
-/* These rules deliberately target the homepage navigation and hero only. */
-body > .scrim {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 1100 !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* ---------- Persistent manual theme switch ---------- */
+:root[data-theme="dark"], body[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1020;
+  --surface: #131b2d;
+  --surface-soft: #1a2640;
+  --text: #edf3ff;
+  --muted: #a8b5ce;
+  --blue: #7892ff;
+  --blue-dark: #5d78ef;
+  --blue-light: #9cc8ff;
+  --border: #2b3854;
+  --shadow: 0 14px 38px rgba(0, 0, 0, .28);
 }
-body > .scrim.show {
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
+html[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .sidebar,
+html[data-theme="dark"] .search-wrap,
+html[data-theme="dark"] .video-card,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .theme-card,
+html[data-theme="dark"] .product-card,
+html[data-theme="dark"] .item-card,
+html[data-theme="dark"] .notice,
+html[data-theme="dark"] footer,
+html[data-theme="dark"] .community-card,
+html[data-theme="dark"] .search-wrap input { background-color: var(--surface); color: var(--text); border-color: var(--border); }
+html[data-theme="dark"] .hero { background: linear-gradient(135deg, #172544, #111a31 65%, #202b4b); }
+html[data-theme="dark"] .eyebrow, html[data-theme="dark"] .section-head h2,
+html[data-theme="dark"] .brand, html[data-theme="dark"] .brand b,
+html[data-theme="dark"] .card-body, html[data-theme="dark"] .video-card,
+html[data-theme="dark"] .sidebar nav a { color: var(--text); }
+html[data-theme="dark"] .thumb { background: #111827; }
+html[data-theme="dark"] .icon-btn { color: var(--text); border-color: var(--border); background: var(--surface-soft); }
+html[data-theme="dark"] .pill { background: #27365b; color: #dce6ff; }
+html[data-theme="dark"] input, html[data-theme="dark"] textarea, html[data-theme="dark"] select { background: #111a2d; color: var(--text); border-color: var(--border); }
+#themeToggle { min-width: 42px; font-size: 17px; }
+/* Crop image letterboxing rather than stretching the thumbnail. */
+.thumb { isolation: isolate; }
+.thumb img { display:block; object-fit: cover; object-position: center; }
+@media (max-width: 560px) {
+  .topbar { gap: 8px; padding-left: 12px; padding-right: 12px; }
+  .brand small { font-size: 8px; letter-spacing: .04em; }
+  #themeToggle { min-width: 38px; padding: 8px; }
+  .video-row { grid-template-columns: minmax(0, 1fr); }
+  .video-card, .card, .theme-card, .product-card, .item-card { min-width: 0; }
+  .thumb { aspect-ratio: 16 / 9; }
 }
-body > .sidebar {
-  position: fixed !important;
-  inset: 0 auto 0 0 !important;
-  z-index: 1200 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  width: min(320px, 86vw) !important;
-  max-width: 100% !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  background: #fff !important;
-  transform: translateX(-105%) !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
-body > .sidebar.open {
-  transform: translateX(0) !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-}
-body > .sidebar nav {
-  display: grid !important;
-  gap: 6px !important;
-}
-body > .sidebar nav a {
-  display: block !important;
-  padding: 12px !important;
-  font-size: 14px !important;
-  line-height: 1.4 !important;
-}
-#home {
-  width: min(1120px, calc(100% - 36px));
-  margin-inline: auto;
-}
-.hero-actions .btn {
-  white-space: normal;
-}
-@media (max-width: 760px) {
-  #hom
