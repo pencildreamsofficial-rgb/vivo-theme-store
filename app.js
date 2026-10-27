@@ -54,8 +54,7 @@
     return match ? match[1] : '';
   }
 
-  // Only remove known demo cards and obvious placeholder content.
-  // Real videos added later to Members or Live will still work.
+  // Remove known demo cards and obvious placeholder content.
   const fakeTitles = new Set([
     'originos theme preview',
     'minimal funtouch os setup',
@@ -66,7 +65,6 @@
 
   function isDemo(item = {}) {
     const title = String(item.title || '').trim().toLowerCase();
-
     const description = String(item.description || '').toLowerCase();
     const url = String(item.url || item.video || '').toLowerCase();
     const download = String(item.download || '').toLowerCase();
@@ -106,9 +104,11 @@
     const thumb = document.createElement('div');
     thumb.className = 'thumb';
 
-    const id = ytId(videoUrl);
+    const youtubeVideoId = ytId(videoUrl);
     const src = v.thumbnail ||
-      (id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '');
+      (youtubeVideoId
+        ? `https://img.youtube.com/vi/${youtubeVideoId}/hqdefault.jpg`
+        : '');
 
     if (src) {
       const img = document.createElement('img');
@@ -117,9 +117,9 @@
       img.loading = 'lazy';
 
       img.onerror = () => {
-        if (id && !img.dataset.fallback) {
+        if (youtubeVideoId && !img.dataset.fallback) {
           img.dataset.fallback = '1';
-          img.src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+          img.src = `https://img.youtube.com/vi/${youtubeVideoId}/mqdefault.jpg`;
         } else {
           img.remove();
 
@@ -179,7 +179,9 @@
       const download = document.createElement('a');
       download.className = 'btn ghost';
 
+      // Pass this video's ID to the download page.
       const params = new URLSearchParams({
+        id: v.id || '',
         title: v.title || 'Theme',
         url: downloadUrl,
         devices: v.device || 'Vivo & iQOO'
@@ -353,4 +355,3 @@
       });
     });
 })();
-
