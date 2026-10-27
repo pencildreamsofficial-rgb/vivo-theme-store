@@ -1,3 +1,4 @@
+
 (() => {
   const $ = (s) => document.querySelector(s);
 
@@ -21,6 +22,7 @@
   menuBtn?.addEventListener('click', openMenu);
   closeMenu?.addEventListener('click', shutMenu);
   scrim?.addEventListener('click', shutMenu);
+
   sidebar?.querySelectorAll('a').forEach(a =>
     a.addEventListener('click', shutMenu)
   );
@@ -31,6 +33,7 @@
 
   searchBtn?.addEventListener('click', () => {
     searchWrap?.classList.toggle('active');
+
     if (searchWrap?.classList.contains('active')) {
       searchInput?.focus();
     }
@@ -51,16 +54,24 @@
     const match = url.match(
       /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/
     );
+
     return match ? match[1] : '';
   }
 
-  function isDemo(v) {
+  // Only these 3 real video IDs will be displayed.
+  const realVideoIds = [
+    'video-1792930144908',
+    'video-1792903968525',
+    'video-1792902171007'
+  ];
+
+  function isDemo(item) {
     const text = [
-      v.title,
-      v.description,
-      v.url,
-      v.video,
-      v.download
+      item.title,
+      item.description,
+      item.url,
+      item.video,
+      item.download
     ].join(' ').toLowerCase();
 
     return /demo|sample|placeholder|replace-with|example\.com/.test(text);
@@ -106,6 +117,7 @@
           img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
         } else {
           img.remove();
+
           if (!thumb.querySelector('.thumb-fallback')) {
             const fallback = document.createElement('div');
             fallback.className = 'thumb-fallback';
@@ -151,6 +163,7 @@
     watch.target = '_blank';
     watch.rel = 'noopener noreferrer';
     watch.textContent = '▶ Watch';
+
     actions.append(watch);
 
     const downloadUrl = v.download || '';
@@ -165,6 +178,7 @@
         'download.html?title=' + encodeURIComponent(v.title || 'Theme') +
         '&url=' + encodeURIComponent(downloadUrl) +
         '&devices=' + encodeURIComponent(v.device || 'Vivo & iQOO');
+
       download.textContent = '↓ Theme ZIP';
       actions.append(download);
     }
@@ -238,8 +252,8 @@
         body.className = 'card-body';
 
         const heading = document.createElement('h3');
-        heading.textContent = (resource.icon || '✧') +
-          ' ' + (resource.title || 'Resource');
+        heading.textContent =
+          (resource.icon || '✧') + ' ' + (resource.title || 'Resource');
 
         const description = document.createElement('p');
         description.textContent = resource.description || '';
@@ -283,21 +297,25 @@
 
   searchInput?.addEventListener('input', render);
 
-  fetch('videos.json')
+  fetch('./videos.json')
     .then(response => {
       if (!response.ok) {
         throw new Error('Could not load videos.json');
       }
+
       return response.json();
     })
     .then(data => {
       window.storeData = data;
 
-      // Demo/sample entries are excluded.
+      // FIX: Display only the 3 known real videos.
       allVideos = (data.videos || []).filter(video =>
-        !isDemo(video) && (video.url || video.video)
+        realVideoIds.includes(video.id) &&
+        !isDemo(video) &&
+        (video.url || video.video)
       );
 
+      // Hide sample resources as well.
       allResources = (data.resources || []).filter(resource =>
         !isDemo(resource)
       );
@@ -312,7 +330,7 @@
       render();
     })
     .catch(error => {
-      console.error(error);
+      console.error('Video Store Error:', error);
 
       [
         'latestGrid',
@@ -322,6 +340,7 @@
         'widgetsGrid'
       ].forEach(id => {
         const element = document.getElementById(id);
+
         if (element) {
           element.innerHTML =
             '<p class="notice">Could not load videos. Please check videos.json.</p>';
@@ -329,4 +348,3 @@
       });
     });
 })();
-
