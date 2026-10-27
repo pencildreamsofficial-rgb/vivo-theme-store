@@ -1,4 +1,296 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f8ff"><meta name="color-scheme" content="light dark"><title>Theme Passport — Vivo Theme Store</title><link rel="stylesheet" href="style.css?v=20261027-themefix"><style>
-.passport{max-width:850px;margin:30px auto;padding:20px;color:var(--text)}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.topline a{color:var(--blue);text-decoration:none}.intro,.panel{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}.orb{font-size:32px}.intro h1{margin:8px 0;font-size:clamp(28px,5vw,42px)}.intro p,.info{color:var(--muted);line-height:1.6}.track{height:8px;background:var(--surface-soft);border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-light));transition:width .2s}.progress{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:9px 0}.dots{display:flex;gap:8px;margin:16px 0}.dot{width:10px;height:10px;border-radius:50%;background:var(--border)}.dot.active{background:var(--blue)}.panel h2{margin-top:0}.field{display:block;margin:16px 0}.field input,.field select{display:block;width:100%;padding:13px;border-radius:12px;border:1px solid var(--border);background:var(--surface-soft);color:var(--text);margin-top:7px}.checks{display:grid;gap:10px}.check{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:20px}.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.primary{background:var(--blue);color:white}.secondary{background:var(--surface-soft);color:var(--text);border:1px solid var(--border)}.status{margin-top:12px;color:var(--muted)}.summary{background:var(--surface-soft);border-radius:14px;padding:14px;line-height:1.7}html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--surface);color:var(--text)}@media(max-width:560px){.passport{margin:12px auto;padding:12px}.intro,.panel{padding:18px}.topline{align-items:flex-start}.actions .btn{flex:1}.intro h1{font-size:29px}}
-</style></head><body><main class="passport"><div class="topline"><a href="index.html">← Back to store</a><button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">🌙</button></div><section class="intro"><div class="orb">✦</div><div class="eyebrow">VIVO THEME STORE</div><h1>Theme Passport</h1><p>Complete these six quick steps before opening your theme download. Check the theme notes and confirm compatibility with your device.</p><div class="track"><div class="fill" id="fill"></div></div><div class="progress"><span id="stepLabel">Step 1 of 6</span><span id="percent">17%</span></div><div class="dots" id="dots"></div></section><section class="panel"><div id="stage"></div><div class="status" id="status" role="status" aria-live="polite"></div><div class="actions"><button class="btn secondary" id="back" type="button">← Back</button><button class="btn primary" id="next" type="button">Continue →</button></div></section></main><script src="theme.js"></script><script>
-(()=>{const params=new URLSearchParams(location.search);const title=params.get('title')||'Vivo / iQOO Theme';const raw=params.get('url')||'';const url=/^https:\/\/(drive\.google\.com|docs\.google\.com)\//i.test(raw)?raw:'';const stages=[{title:'Welcome',text:'You are preparing to open the download for:',field:`<div class="summary"><b>${escapeHtml(title)}</b><br>Only download files from sources you trust.</div>`},{title:'Choose your device',text:'Select the device family you want to use this theme on.',field:'<label class="field">Device<select id="device"><option>Vivo</option><option>iQOO</option><option>Vivo & iQOO</option></select></label>'},{title:'Compatibility check',text:'Confirm you have checked the theme video for OS/version compatibility.',field:'<label class="check"><input id="compat" type="checkbox"> I checked the compatibility details.</label>'},{title:'Backup reminder',text:'Back up important settings before applying a theme or changing system appearance.',field:'<label class="check"><input id="backup" type="checkbox"> I understand and have considered a backup.</label>'},{title:'Source confirmation',text:'Open the creator’s video if you need installation steps or extra information.',field:'<a class="btn secondary" href="https://www.youtube.com/@vivothemestore" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a>'},{title:'Ready',text:'Review your choices, then open the provided download link if available.',field:`<div class="summary" id="finalSummary"></div>`}];let step=0;const stage=document.getElementById('stage'),dots=document.getElementById('dots'),fill=document.getElementById('fill'),label=document.getElementById('stepLabel'),percent=document.getElementById('percent'),back=document.getElementById('back'),next=document.getElementById('next'),status=document.getElementById('status');function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}function render(){const s=stages[step];stage.innerHTML=`<h2>${s.title}</h2><p class="info">${s.text}</p>${s.field}`;dots.innerHTML=stages.map((_,i)=>`<span class="dot ${i<=step?'active':''}"></span>`).join('');fill.style.width=((step+1)/6*100)+'%';label.textContent=`Step ${step+1} of 6`;percent.textContent=Math.round((step+1)/6*100)+'%';back.disabled=step===0;back.style.opacity=step===0?'.5':'1';next.textContent=step===5?(url?'Open download ↗':'Finish'):'Continue →';if(step===5){const device=document.getElementById('device')?.value||'Vivo / iQOO';document.getElementById('finalSummary').innerHTML=`<b>Theme:</b> ${escapeHtml(title)}<br><b>Device:</b> ${escapeHtml(device)}<br><b>Download:</b> ${url?'Link available':'No direct download link supplied'}`;}}next.addEventListener('click',()=>{if(step===2&&!document.getElementById('compat')?.checked){status.textContent='Please confirm you checked compatibility to continue.';return;}if(step===3&&!document.getElementById('backup')?.checked){status.textContent='Please acknowledge the backup reminder to continue.';return;}status.textContent='';if(step<5){step++;render();}else if(url){location.href=url;}else{status.textContent='No download link is available for this video. Check the video description.';}});back.addEventListener('click',()=>{if(step>0){step--;status.textContent='';render();}});render();})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f8ff">
+<meta name="color-scheme" content="light dark">
+<title>Theme Passport — Vivo Theme Store</title>
+<link rel="stylesheet" href="style.css?v=20261027-themefix">
+
+<style>
+.passport{max-width:850px;margin:30px auto;padding:20px;color:var(--text)}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.topline a{color:var(--blue);text-decoration:none}
+.intro,.panel{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
+.orb{font-size:32px}
+.intro h1{margin:8px 0;font-size:clamp(28px,5vw,42px)}
+.intro p,.info{color:var(--muted);line-height:1.6}
+.track{height:8px;background:var(--surface-soft);border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-light));transition:width .2s}
+.progress{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:9px 0}
+.dots{display:flex;gap:8px;margin:16px 0}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.dot.active{background:var(--blue)}
+.panel h2{margin-top:0}
+.field{display:block;margin:16px 0}
+.field input,.field select{display:block;width:100%;box-sizing:border-box;padding:13px;border-radius:12px;border:1px solid var(--border);background:var(--surface-soft);color:var(--text);margin-top:7px}
+.checks{display:grid;gap:10px}
+.check{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px}
+.actions{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.primary{background:var(--blue);color:white}
+.secondary{background:var(--surface-soft);color:var(--text);border:1px solid var(--border)}
+.status{margin-top:12px;color:var(--muted);line-height:1.5}
+.summary{background:var(--surface-soft);border-radius:14px;padding:14px;line-height:1.7}
+.error{color:#d93025}
+html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--surface);color:var(--text)}
+@media(max-width:560px){
+  .passport{margin:12px auto;padding:12px}
+  .intro,.panel{padding:18px}
+  .topline{align-items:flex-start}
+  .actions .btn{flex:1}
+  .intro h1{font-size:29px}
+}
+</style>
+</head>
+
+<body>
+<main class="passport">
+  <div class="topline">
+    <a href="index.html">← Back to store</a>
+    <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">🌙</button>
+  </div>
+
+  <section class="intro">
+    <div class="orb">✦</div>
+    <div class="eyebrow">VIVO THEME STORE</div>
+    <h1>Theme Passport</h1>
+    <p>Complete these seven quick steps before opening your theme download. Check the theme notes and confirm compatibility with your device.</p>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="progress">
+      <span id="stepLabel">Step 1 of 7</span>
+      <span id="percent">14%</span>
+    </div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <section class="panel">
+    <div id="stage"></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+    <div class="actions">
+      <button class="btn secondary" id="back" type="button">← Back</button>
+      <button class="btn primary" id="next" type="button">Continue →</button>
+    </div>
+  </section>
+</main>
+
+<script src="theme.js"></script>
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+  const title = params.get('title') || 'Vivo / iQOO Theme';
+  const videoId = params.get('id') || '';
+  const raw = params.get('url') || '';
+
+  // Only allow the expected Google Drive download domains.
+  const url = /^https:\/\/(drive\.google\.com|docs\.google\.com)\//i.test(raw)
+    ? raw
+    : '';
+
+  const stageDefinitions = [
+    {
+      title: 'Welcome',
+      text: 'You are preparing to open the download for:',
+      field: `<div class="summary"><b>${escapeHtml(title)}</b><br>Only download files from sources you trust.</div>`
+    },
+    {
+      title: 'Choose your device',
+      text: 'Select the device family you want to use this theme on.',
+      field: '<label class="field">Device<select id="device"><option>Vivo</option><option>iQOO</option><option>Vivo &amp; iQOO</option></select></label>'
+    },
+    {
+      title: 'Compatibility check',
+      text: 'Confirm you have checked the theme video for OS/version compatibility.',
+      field: '<label class="check"><input id="compat" type="checkbox"> I checked the compatibility details.</label>'
+    },
+    {
+      title: 'Backup reminder',
+      text: 'Back up important settings before applying a theme or changing system appearance.',
+      field: '<label class="check"><input id="backup" type="checkbox"> I understand and have considered a backup.</label>'
+    },
+    {
+      title: 'Source confirmation',
+      text: 'Open the creator’s video if you need installation steps or extra information.',
+      field: '<a class="btn secondary" href="https://www.youtube.com/@vivothemestore" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a>'
+    },
+    {
+      title: 'Ready',
+      text: 'Review your choices before continuing to password verification.',
+      field: '<div class="summary" id="finalSummary"></div>'
+    },
+    {
+      title: 'Enter Video Password',
+      text: 'Enter the password supplied for this video to continue to the download.',
+      field: `
+        <label class="field">
+          Video password
+          <input id="videoPassword" type="password" autocomplete="current-password" placeholder="Enter Video PW" required>
+        </label>
+        <p class="info">The password must match this video’s saved password.</p>
+      `
+    }
+  ];
+
+  let step = 0;
+  let verified = false;
+  let videoData = null;
+
+  const stage = document.getElementById('stage');
+  const dots = document.getElementById('dots');
+  const fill = document.getElementById('fill');
+  const label = document.getElementById('stepLabel');
+  const percent = document.getElementById('percent');
+  const back = document.getElementById('back');
+  const next = document.getElementById('next');
+  const status = document.getElementById('status');
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[c]));
+  }
+
+  async function loadVideoData() {
+    try {
+      const response = await fetch('./videos.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Could not load videos.json');
+      const data = await response.json();
+
+      videoData = (data.videos || []).find(video =>
+        String(video.id || '') === videoId
+      ) || null;
+    } catch (error) {
+      console.error('Password data error:', error);
+      videoData = null;
+    }
+  }
+
+  function render() {
+    const current = stageDefinitions[step];
+
+    stage.innerHTML = `
+      <h2>${current.title}</h2>
+      <p class="info">${current.text}</p>
+      ${current.field}
+    `;
+
+    dots.innerHTML = stageDefinitions.map((_, i) =>
+      `<span class="dot ${i <= step ? 'active' : ''}"></span>`
+    ).join('');
+
+    fill.style.width = ((step + 1) / stageDefinitions.length * 100) + '%';
+    label.textContent = `Step ${step + 1} of ${stageDefinitions.length}`;
+    percent.textContent =
+      Math.round((step + 1) / stageDefinitions.length * 100) + '%';
+
+    back.disabled = step === 0;
+    back.style.opacity = step === 0 ? '.5' : '1';
+
+    next.textContent = step === 5
+      ? 'Continue to password →'
+      : step === 6
+        ? 'Verify password →'
+        : 'Continue →';
+
+    if (step === 5) {
+      const device = document.getElementById('device')?.value || 'Vivo / iQOO';
+      document.getElementById('finalSummary').innerHTML =
+        `<b>Theme:</b> ${escapeHtml(title)}<br>` +
+        `<b>Device:</b> ${escapeHtml(device)}<br>` +
+        `<b>Download:</b> ${url ? 'Link available' : 'No direct download link supplied'}`;
+    }
+  }
+
+  next.addEventListener('click', async () => {
+    if (step === 2 && !document.getElementById('compat')?.checked) {
+      status.textContent = 'Please confirm you checked compatibility to continue.';
+      return;
+    }
+
+    if (step === 3 && !document.getElementById('backup')?.checked) {
+      status.textContent = 'Please acknowledge the backup reminder to continue.';
+      return;
+    }
+
+    if (step === 6) {
+      const entered = document.getElementById('videoPassword')?.value ?? '';
+
+      status.classList.remove('error');
+
+      if (!videoId) {
+        status.textContent = 'This download link is missing its video ID. Return to the store and open the download again.';
+        status.classList.add('error');
+        return;
+      }
+
+      next.disabled = true;
+      next.textContent = 'Checking…';
+
+      if (!videoData) {
+        await loadVideoData();
+      }
+
+      next.disabled = false;
+      next.textContent = 'Verify password →';
+
+      if (!videoData) {
+        status.textContent = 'Could not find this video in videos.json. Please return to the store and try again.';
+        status.classList.add('error');
+        return;
+      }
+
+      const savedPassword = String(videoData.videoPW || '');
+
+      if (!savedPassword) {
+        status.textContent = 'No password has been set for this video yet. Please contact the site owner.';
+        status.classList.add('error');
+        return;
+      }
+
+      if (entered !== savedPassword) {
+        status.textContent = 'Incorrect password. Please try again.';
+        status.classList.add('error');
+        return;
+      }
+
+      verified = true;
+
+      if (url && verified) {
+        status.textContent = 'Password accepted. Opening download…';
+        location.href = url;
+      } else {
+        status.textContent = 'Password accepted, but no valid download link was supplied.';
+        status.classList.add('error');
+      }
+
+      return;
+    }
+
+    status.textContent = '';
+    status.classList.remove('error');
+
+    if (step < stageDefinitions.length - 1) {
+      step++;
+      render();
+    }
+  });
+
+  back.addEventListener('click', () => {
+    if (step > 0) {
+      step--;
+      status.textContent = '';
+      status.classList.remove('error');
+      render();
+    }
+  });
+
+  loadVideoData().then(render);
+})();
+</script>
+</body>
+</html>
