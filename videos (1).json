@@ -1,116 +1,26 @@
 {
-  "settings": {
-    "youtube": "https://www.youtube.com/@vivothemestore",
-    "telegram": "https://t.me/your_channel",
-    "youtubeChannel": "https://youtube.com/@vivothemestore?si=FtaEG8MvvntiWS8X"
-  },
   "videos": [
     {
+      "title": "INSANE OriginOS 6 Exclusive Theme for Vivo & iQOO | (iTheme)",
+      "category": "premium",
+      "thumbnail": "https://img.youtube.com/vi/2ONhm3pTzYM/hqdefault.jpg",
+      "video": "https://youtu.be/2ONhm3pTzYM",
+      "download": "https://drive.google.com/file/d/12J7XQlymC9DVShqjqG7dKejgz3rXHPHQ/view?usp=drivesdk"
+    },
+    {
+      "title": "Samsung Premium S22 Ultra",
+      "category": "premium",
+      "thumbnail": "https://img.youtube.com/vi/7rSRcyt1IcA/hqdefault.jpg",
+      "video": "https://youtu.be/7rSRcyt1IcA",
+      "download": "https://drive.google.com/file/d/1qesAcSQKCqQ-uGY75iGSsDZQV3ZknTcj/view?usp=drivesdk"
+    },
+    {
       "title": "One UI 9 Inspired Theme for Vivo & iQOO | Customization Concept 📱",
-      "description": "For Download Visit Video And Follow Instruction",
       "category": "latest",
-      "tag": "Latest Video",
       "thumbnail": "https://img.youtube.com/vi/CB0HzvujC44/hqdefault.jpg",
-      "url": "https://youtu.be/CB0HzvujC44?si=FlIfeu9MXq75NfEf",
-      "download": "",
-      "id": "video-1792902171007"
-    },
-    {
-      "title": "OriginOS Theme Preview",
-      "section": "latest",
-      "category": "OriginOS",
-      "type": "Themes",
-      "device": "Vivo & iQOO",
-      "os": "OriginOS",
-      "description": "Demo card — replace with your latest upload details.",
-      "date": "LATEST",
-      "thumbnail": "",
-      "url": "https://www.youtube.com/@vivothemestore",
-      "download": "https://example.com/replace-with-theme-zip"
-    },
-    {
-      "title": "Minimal Funtouch OS Setup",
-      "section": "latest",
-      "category": "Funtouch OS",
-      "type": "Tutorial",
-      "device": "Vivo",
-      "os": "Funtouch OS",
-      "description": "Sample video card for your latest upload.",
-      "date": "LATEST",
-      "thumbnail": "",
-      "url": "https://www.youtube.com/@vivothemestore",
+      "video": "https://youtu.be/CB0HzvujC44",
       "download": ""
-    },
-    {
-      "title": "Purple AMOLED Theme",
-      "section": "premium",
-      "category": "Themes",
-      "type": "Themes",
-      "device": "Vivo & iQOO",
-      "os": "Compatible OS",
-      "description": "Replace with your featured theme video.",
-      "date": "FEATURED",
-      "thumbnail": "",
-      "url": "https://www.youtube.com/@vivothemestore",
-      "download": "https://example.com/replace-with-theme-zip"
-    },
-    {
-      "title": "Members Theme Collection",
-      "section": "members",
-      "category": "Themes",
-      "type": "Themes",
-      "device": "Vivo & iQOO",
-      "os": "Members",
-      "description": "YouTube members-only video link. Membership is still required to watch.",
-      "date": "MEMBERS",
-      "thumbnail": "",
-      "url": "https://www.youtube.com/@vivothemestore",
-      "download": ""
-    },
-    {
-      "title": "Live Theme Q&A",
-      "section": "live",
-      "category": "Tutorial",
-      "type": "Tutorial",
-      "device": "Vivo & iQOO",
-      "os": "Live replay",
-      "description": "Replace with your live stream or replay link.",
-      "date": "LIVE REPLAY",
-      "thumbnail": "",
-      "url": "https://www.youtube.com/@vivothemestore",
-      "download": ""
-    }
-  ],
-  "resources": [
-    {
-      "icon": "▦",
-      "title": "Widget Pack",
-      "description": "Add a widget resource and link here.",
-      "url": "https://www.youtube.com/@vivothemestore"
-    },
-    {
-      "icon": "◈",
-      "title": "Theme ZIP Library",
-      "description": "Shortcut to your public theme file collection.",
-      "url": "https://example.com/replace-with-download-folder"
-    },
-    {
-      "icon": "✧",
-      "title": "Setup Guide",
-      "description": "Link a theme installation guide.",
-      "url": "https://www.youtube.com/@vivothemestore"
-    }
-  ],
-  "posts": [
-    {
-      "title": "New theme coming soon",
-      "text": "Replace this demo with a real community post or announcement.",
-      "url": "https://www.youtube.com/@vivothemestore"
-    },
-    {
-      "title": "Which style next?",
-      "text": "Highlight a poll and invite viewers to vote on your channel.",
-      "url": "https://www.youtube.com/@vivothemestore"
     }
   ]
 }
+
