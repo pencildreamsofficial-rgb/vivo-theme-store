@@ -88,6 +88,10 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
     ? raw
     : '';
 
+  // Preserve the selected device details when changing steps.
+  let selectedSeries = '';
+  let selectedDeviceName = '';
+
   const stageDefinitions = [
     {
       title: 'Welcome',
@@ -96,8 +100,36 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
     },
     {
       title: 'Choose your device',
-      text: 'Select the device family you want to use this theme on.',
-      field: '<label class="field">Device<select id="device"><option>Vivo</option><option>iQOO</option><option>Vivo &amp; iQOO</option></select></label>'
+      text: 'Select your device series and enter your exact phone model.',
+      field: `
+        <label class="field">
+          Device Model / Series
+          <select id="deviceSeries" required>
+            <option value="">Select your series</option>
+            <option value="Vivo X Series">Vivo X Series</option>
+            <option value="Vivo V Series">Vivo V Series</option>
+            <option value="Vivo T Series">Vivo T Series</option>
+            <option value="Vivo Y Series">Vivo Y Series</option>
+            <option value="Vivo S Series">Vivo S Series</option>
+            <option value="Vivo Z Series">Vivo Z Series</option>
+            <option value="Vivo YUVA Series">Vivo YUVA Series</option>
+            <option value="iQOO Series">iQOO Series</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <label class="field">
+          Device Name
+          <input
+            id="deviceName"
+            type="text"
+            placeholder="e.g. Vivo X200 Pro"
+            maxlength="80"
+            autocomplete="off"
+            required
+          >
+        </label>
+      `
     },
     {
       title: 'Compatibility check',
@@ -133,7 +165,6 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
   ];
 
   let step = 0;
-  let verified = false;
   let videoData = null;
 
   const stage = document.getElementById('stage');
@@ -159,6 +190,7 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
     try {
       const response = await fetch('./videos.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('Could not load videos.json');
+
       const data = await response.json();
 
       videoData = (data.videos || []).find(video =>
@@ -179,12 +211,25 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
       ${current.field}
     `;
 
+    // Restore the device values if the user returns to this step.
+    if (step === 1) {
+      const seriesInput = document.getElementById('deviceSeries');
+      const nameInput = document.getElementById('deviceName');
+
+      if (seriesInput) seriesInput.value = selectedSeries;
+      if (nameInput) nameInput.value = selectedDeviceName;
+    }
+
     dots.innerHTML = stageDefinitions.map((_, i) =>
       `<span class="dot ${i <= step ? 'active' : ''}"></span>`
     ).join('');
 
-    fill.style.width = ((step + 1) / stageDefinitions.length * 100) + '%';
-    label.textContent = `Step ${step + 1} of ${stageDefinitions.length}`;
+    fill.style.width =
+      ((step + 1) / stageDefinitions.length * 100) + '%';
+
+    label.textContent =
+      `Step ${step + 1} of ${stageDefinitions.length}`;
+
     percent.textContent =
       Math.round((step + 1) / stageDefinitions.length * 100) + '%';
 
@@ -198,32 +243,62 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
         : 'Continue →';
 
     if (step === 5) {
-      const device = document.getElementById('device')?.value || 'Vivo / iQOO';
       document.getElementById('finalSummary').innerHTML =
         `<b>Theme:</b> ${escapeHtml(title)}<br>` +
-        `<b>Device:</b> ${escapeHtml(device)}<br>` +
+        `<b>Device Series:</b> ${escapeHtml(selectedSeries)}<br>` +
+        `<b>Device Name:</b> ${escapeHtml(selectedDeviceName)}<br>` +
         `<b>Download:</b> ${url ? 'Link available' : 'No direct download link supplied'}`;
     }
   }
 
   next.addEventListener('click', async () => {
+    status.textContent = '';
+    status.classList.remove('error');
+
+    // Step 2: validate and remember the device selection.
+    if (step === 1) {
+      const seriesInput = document.getElementById('deviceSeries');
+      const nameInput = document.getElementById('deviceName');
+
+      selectedSeries = seriesInput?.value || '';
+      selectedDeviceName = nameInput?.value.trim() || '';
+
+      if (!selectedSeries) {
+        status.textContent = 'Please select your device series.';
+        status.classList.add('error');
+        return;
+      }
+
+      if (!selectedDeviceName) {
+        status.textContent = 'Please enter your device name.';
+        status.classList.add('error');
+        nameInput?.focus();
+        return;
+      }
+    }
+
     if (step === 2 && !document.getElementById('compat')?.checked) {
-      status.textContent = 'Please confirm you checked compatibility to continue.';
+      status.textContent =
+        'Please confirm you checked compatibility to continue.';
+      status.classList.add('error');
       return;
     }
 
     if (step === 3 && !document.getElementById('backup')?.checked) {
-      status.textContent = 'Please acknowledge the backup reminder to continue.';
+      status.textContent =
+        'Please acknowledge the backup reminder to continue.';
+      status.classList.add('error');
       return;
     }
 
+    // Final step: verify the password associated with this video.
     if (step === 6) {
-      const entered = document.getElementById('videoPassword')?.value ?? '';
-
-      status.classList.remove('error');
+      const entered =
+        document.getElementById('videoPassword')?.value ?? '';
 
       if (!videoId) {
-        status.textContent = 'This download link is missing its video ID. Return to the store and open the download again.';
+        status.textContent =
+          'This download link is missing its video ID. Return to the store and open the download again.';
         status.classList.add('error');
         return;
       }
@@ -239,7 +314,8 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
       next.textContent = 'Verify password →';
 
       if (!videoData) {
-        status.textContent = 'Could not find this video in videos.json. Please return to the store and try again.';
+        status.textContent =
+          'Could not find this video in videos.json. Please return to the store and try again.';
         status.classList.add('error');
         return;
       }
@@ -247,7 +323,8 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
       const savedPassword = String(videoData.videoPW || '');
 
       if (!savedPassword) {
-        status.textContent = 'No password has been set for this video yet. Please contact the site owner.';
+        status.textContent =
+          'No password has been set for this video yet. Please contact the site owner.';
         status.classList.add('error');
         return;
       }
@@ -258,21 +335,17 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
         return;
       }
 
-      verified = true;
-
-      if (url && verified) {
+      if (url) {
         status.textContent = 'Password accepted. Opening download…';
         location.href = url;
       } else {
-        status.textContent = 'Password accepted, but no valid download link was supplied.';
+        status.textContent =
+          'Password accepted, but no valid download link was supplied.';
         status.classList.add('error');
       }
 
       return;
     }
-
-    status.textContent = '';
-    status.classList.remove('error');
 
     if (step < stageDefinitions.length - 1) {
       step++;
@@ -282,6 +355,15 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
 
   back.addEventListener('click', () => {
     if (step > 0) {
+      // Save device values before leaving the device step.
+      if (step === 2) {
+        selectedSeries =
+          document.getElementById('deviceSeries')?.value || selectedSeries;
+
+        selectedDeviceName =
+          document.getElementById('deviceName')?.value.trim() || selectedDeviceName;
+      }
+
       step--;
       status.textContent = '';
       status.classList.remove('error');
