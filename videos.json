@@ -193,12 +193,15 @@
       "title": "New theme coming soon",
       "text": "Replace this demo with a real community post or announcement.",
       "url": "https://www.youtube.com/@vivothemestore"
-    },
     {
       "title": "Which style next?",
       "text": "Highlight a poll and invite viewers to vote on your channel.",
       "url": "https://www.youtube.com/@vivothemestore"
     }
   ],
-  "premiumMembers": []
+  "premiumMembers": [
+  { "name": "Vanzzz Delux User", "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member1.jpg" },
+  { "name": "sandraparham VTS_f", "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member2.jpg" },
+  { "name": "vivotheme VTS_f", "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member3.jpg" }
+  ]
 }
