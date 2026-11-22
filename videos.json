@@ -200,5 +200,18 @@
       "url": "https://www.youtube.com/@vivothemestore"
     }
   ],
-  "premiumMembers": []
+  "premiumMembers": [
+    {
+      "name": "Vanzzz Delux_user",
+      "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member1.jpg"
+    },
+    {
+      "name": "sandraparham VTS_f",
+      "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member2.jpg"
+    },
+    {
+      "name": "vivotheme VTS_f",
+      "image": "https://pencildreamsofficial-rgb.github.io/vivo-theme-store/Member3.jpg"
     }
+  ]
+}
