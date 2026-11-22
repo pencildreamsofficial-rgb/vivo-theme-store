@@ -1,8 +1,9 @@
 {
   "settings": {
     "youtube": "https://www.youtube.com/@vivothemestore",
-    "telegram": "https://t.me/your_channel",
-    "youtubeChannel": "https://youtube.com/@vivothemestore?si=FtaEG8MvvntiWS8X"
+    "telegram": "https://t.me/vivothemestore7",
+    "youtubeChannel": "https://youtube.com/@vivothemestore?si=FtaEG8MvvntiWS8X",
+    "membershipUrl": "https://www.youtube.com/@vivothemestore/join"
   },
   "videos": [
     {
@@ -13,8 +14,8 @@
       "thumbnail": "https://img.youtube.com/vi/-yH7EByQzqk/hqdefault.jpg",
       "url": "https://youtu.be/-yH7EByQzqk",
       "download": "https://drive.google.com/file/d/1y2fVipp1cK_aK1hG8E7F7u11F_IcluKn/view?usp=drivesdk",
-      "videoPW": "vts2.0",
-      "id": "video-1794633287591"
+      "id": "video-1794633287591",
+      "videoPWHash": "90eda9e1f225588edc6bcdc87431e35645c5c6fa8d57e997501e0c361c7f9a3e"
     },
     {
       "title": "OriginOS 7 Theme For Vivo - iQ00 Devices | Get Flagship Experience 📱",
@@ -24,8 +25,8 @@
       "thumbnail": "https://img.youtube.com/vi/bw0q74F8vmk/hqdefault.jpg",
       "url": "https://youtu.be/bw0q74F8vmk?si=QcFJhnPVi2fulgvs",
       "download": "https://drive.google.com/file/d/1f9XXGdv4TIyGXozY2wP5Sw-ZK_mguDJX/view?usp=drivesdk",
-      "videoPW": "behappy",
-      "id": "video-1794115048079"
+      "id": "video-1794115048079",
+      "videoPWHash": "a20475d878775f271c62b93d81f6ed20bb97acb20ed4ee23365dd7d42af25f19"
     },
     {
       "title": "Nothing 4a Theme for Vivo & iQOO 🔥 | Premium Nothing OS Look",
@@ -35,8 +36,8 @@
       "thumbnail": "https://img.youtube.com/vi/BqdTYqomDHo/hqdefault.jpg",
       "url": "https://youtu.be/BqdTYqomDHo?si=1CkXuaXB1FMe9EZ7",
       "download": "https://drive.google.com/file/d/1r8xFgi7KNe0UTxQh2bCriG8xZrI4wEy3/view?usp=drivesdk",
-      "videoPW": "vtsarmy",
-      "id": "video-1793939099422"
+      "id": "video-1793939099422",
+      "videoPWHash": "72796bcca2470c2744b9befd9c1bd063afcccc6517cb59182049365ce1552716"
     },
     {
       "title": "The BEST One UI 9.0 Theme Ever! 😍 Dark Mode for Vivo | Theme For Vivo |",
@@ -46,8 +47,8 @@
       "thumbnail": "https://img.youtube.com/vi/Q-YeqJWCJmk/hqdefault.jpg",
       "url": "https://youtu.be/Q-YeqJWCJmk?si=XgstyBM_e7PZQ7_L",
       "download": "https://drive.google.com/file/d/1VhwC49ILRGU_Vbq4TBEt0LnTgAOndpJ2/view?usp=drivesdk",
-      "videoPW": "galaxyos",
-      "id": "video-1793765265999"
+      "id": "video-1793765265999",
+      "videoPWHash": "6d332b18ec641234824adddfebf50482fa98c2bbc18e8a999e9f8dd0caa841d0"
     },
     {
       "title": "The Ultimate iPhone 18 Pro Max Experience on Vivo! 🔥 iOS 27 Theme",
@@ -57,8 +58,8 @@
       "thumbnail": "https://img.youtube.com/vi/TygqjwLqFLY/hqdefault.jpg",
       "url": "https://youtu.be/TygqjwLqFLY",
       "download": "https://drive.google.com/file/d/1Etr1yCoydMzZvqaqjShK7Qac3VGAbIVD/view?usp=drivesdk",
-      "videoPW": "betatest",
-      "id": "video-1793546974229"
+      "id": "video-1793546974229",
+      "videoPWHash": "da829b165949ae6ffe42d137b01273897fd02870030147ae6b935668d1c8b61b"
     },
     {
       "title": "Vivo Users, Don’t Miss This COLOROS 16 Theme!",
@@ -68,8 +69,8 @@
       "thumbnail": "https://img.youtube.com/vi/u7eGBEnWpCM/hqdefault.jpg",
       "url": "https://youtu.be/u7eGBEnWpCM?si=R0JzJp3ZDGMltY8c",
       "download": "https://drive.google.com/file/d/1iK1zx2nwQbGTc9L5vmY-0blWGIgoCN7X/view?usp=drivesdk",
-      "videoPW": "10ksubs",
-      "id": "video-1793084669061"
+      "id": "video-1793084669061",
+      "videoPWHash": "16db2d0e6598066aa1d88429bafc14daec60e34a4567e11dc72de2ffaaf79800"
     },
     {
       "title": "INSANE OriginOS 6 Exclusive Theme for Vivo & iQOO | (iTheme)",
@@ -198,5 +199,6 @@
       "text": "Highlight a poll and invite viewers to vote on your channel.",
       "url": "https://www.youtube.com/@vivothemestore"
     }
-  ]
+  ],
+  "premiumMembers": []
 }
