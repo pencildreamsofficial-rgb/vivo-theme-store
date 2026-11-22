@@ -2,75 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f5f8ff">
-<meta name="color-scheme" content="light dark">
-<title>Theme Passport — Vivo Theme Store</title>
-<link rel="stylesheet" href="style.css?v=20261027-themefix">
-
-<style>
-.passport{max-width:850px;margin:30px auto;padding:20px;color:var(--text)}
-.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
-.topline a{color:var(--blue);text-decoration:none}
-.intro,.panel{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px;box-shadow:var(--shadow);margin-bottom:18px}
-.orb{font-size:32px}
-.intro h1{margin:8px 0;font-size:clamp(28px,5vw,42px)}
-.intro p,.info{color:var(--muted);line-height:1.6}
-.track{height:8px;background:var(--surface-soft);border-radius:99px;overflow:hidden}
-.fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-light));transition:width .2s}
-.progress{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:9px 0}
-.dots{display:flex;gap:8px;margin:16px 0}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
-.dot.active{background:var(--blue)}
-.panel h2{margin-top:0}
-.field{display:block;margin:16px 0}
-.field input,.field select{display:block;width:100%;box-sizing:border-box;padding:13px;border-radius:12px;border:1px solid var(--border);background:var(--surface-soft);color:var(--text);margin-top:7px}
-.checks{display:grid;gap:10px}
-.check{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px}
-.actions{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
-.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-.primary{background:var(--blue);color:white}
-.secondary{background:var(--surface-soft);color:var(--text);border:1px solid var(--border)}
-.status{margin-top:12px;color:var(--muted);line-height:1.5}
-.summary{background:var(--surface-soft);border-radius:14px;padding:14px;line-height:1.7}
-.error{color:#d93025}
-html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--surface);color:var(--text)}
-@media(max-width:560px){
-  .passport{margin:12px auto;padding:12px}
-  .intro,.panel{padding:18px}
-  .topline{align-items:flex-start}
-  .actions .btn{flex:1}
-  .intro h1{font-size:29px}
-}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f3f4f7">
+<title>Theme Passport – Vivo Theme Store</title>
+<script>try{var t=localStorage.getItem('vivo-theme-store-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<main class="passport">
+<div class="bgw"></div>
+<main class="passport page">
   <div class="topline">
     <a href="index.html">← Back to store</a>
-    <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">🌙</button>
+    <button id="themeToggle" class="ib glass g" type="button" aria-label="Switch theme"></button>
   </div>
 
-  <section class="intro">
-    <div class="orb">✦</div>
+  <section class="intro glass">
     <div class="eyebrow">VIVO THEME STORE</div>
     <h1>Theme Passport</h1>
     <p>Complete these seven quick steps before opening your theme download. Check the theme notes and confirm compatibility with your device.</p>
     <div class="track"><div class="fill" id="fill"></div></div>
-    <div class="progress">
-      <span id="stepLabel">Step 1 of 7</span>
-      <span id="percent">14%</span>
-    </div>
+    <div class="progress"><span id="stepLabel">Step 1 of 7</span><span id="percent">14%</span></div>
     <div class="dots" id="dots"></div>
   </section>
 
-  <section class="panel">
+  <section class="panel glass">
     <div id="stage"></div>
     <div class="status" id="status" role="status" aria-live="polite"></div>
     <div class="actions">
-      <button class="btn secondary" id="back" type="button">← Back</button>
-      <button class="btn primary" id="next" type="button">Continue →</button>
+      <button class="btn g" id="back" type="button">← Back</button>
+      <button class="btn primary g" id="next" type="button">Continue →</button>
     </div>
   </section>
 </main>
@@ -84,166 +47,119 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
   const raw = params.get('url') || '';
 
   // Only allow the expected Google Drive download domains.
-  const url = /^https:\/\/(drive\.google\.com|docs\.google\.com)\//i.test(raw)
-    ? raw
-    : '';
+  const url = /^https:\/\/(drive\.google\.com|docs\.google\.com)\//i.test(raw) ? raw : '';
 
-  // Preserve the selected device details when changing steps.
   let selectedSeries = '';
   let selectedDeviceName = '';
+  let step = 0;
+  let videoData = null;
+
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   const stageDefinitions = [
     {
       title: 'Welcome',
       text: 'You are preparing to open the download for:',
-      field: `<div class="summary"><b>${escapeHtml(title)}</b><br>Only download files from sources you trust.</div>`
+      field: () => `<div class="summary"><b>${escapeHtml(title)}</b><br>Only download files from sources you trust.</div>`
     },
     {
       title: 'Choose your device',
       text: 'Select your device series and enter your exact phone model.',
-      field: `
-        <label class="field">
-          Device Model / Series
+      field: () => `
+        <label class="field">Device Model / Series
           <select id="deviceSeries" required>
             <option value="">Select your series</option>
-            <option value="Vivo X Series">Vivo X Series</option>
-            <option value="Vivo V Series">Vivo V Series</option>
-            <option value="Vivo T Series">Vivo T Series</option>
-            <option value="Vivo Y Series">Vivo Y Series</option>
-            <option value="Vivo S Series">Vivo S Series</option>
-            <option value="Vivo Z Series">Vivo Z Series</option>
-            <option value="Vivo YUVA Series">Vivo YUVA Series</option>
-            <option value="iQOO Series">iQOO Series</option>
-            <option value="Other">Other</option>
+            <option>Vivo X Series</option><option>Vivo V Series</option><option>Vivo T Series</option>
+            <option>Vivo Y Series</option><option>Vivo S Series</option><option>Vivo Z Series</option>
+            <option>Vivo YUVA Series</option><option>iQOO Series</option><option>Other</option>
           </select>
         </label>
-
-        <label class="field">
-          Device Name
-          <input
-            id="deviceName"
-            type="text"
-            placeholder="e.g. Vivo X200 Pro"
-            maxlength="80"
-            autocomplete="off"
-            required
-          >
-        </label>
-      `
+        <label class="field">Device Name
+          <input id="deviceName" type="text" placeholder="e.g. Vivo X200 Pro" maxlength="80" autocomplete="off" required>
+        </label>`
     },
     {
       title: 'Compatibility check',
       text: 'Confirm you have checked the theme video for OS/version compatibility.',
-      field: '<label class="check"><input id="compat" type="checkbox"> I checked the compatibility details.</label>'
+      field: () => '<label class="check"><input id="compat" type="checkbox"> I checked the compatibility details.</label>'
     },
     {
       title: 'Backup reminder',
       text: 'Back up important settings before applying a theme or changing system appearance.',
-      field: '<label class="check"><input id="backup" type="checkbox"> I understand and have considered a backup.</label>'
+      field: () => '<label class="check"><input id="backup" type="checkbox"> I understand and have considered a backup.</label>'
     },
     {
       title: 'Source confirmation',
       text: 'Open the creator’s video if you need installation steps or extra information.',
-      field: '<a class="btn secondary" href="https://www.youtube.com/@vivothemestore" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a>'
+      field: () => '<a class="btn g" href="https://www.youtube.com/@vivothemestore" target="_blank" rel="noopener noreferrer">Open YouTube channel ↗</a>'
     },
     {
       title: 'Ready',
       text: 'Review your choices before continuing to password verification.',
-      field: '<div class="summary" id="finalSummary"></div>'
+      field: () => '<div class="summary" id="finalSummary"></div>'
     },
     {
       title: 'Enter Video Password',
       text: 'Enter the password supplied for this video to continue to the download.',
-      field: `
-        <label class="field">
-          Video password
+      field: () => `
+        <label class="field">Video password
           <input id="videoPassword" type="password" autocomplete="current-password" placeholder="Enter Video PW" required>
         </label>
-        <p class="info">The password must match this video’s saved password.</p>
-      `
+        <p class="info">The password must match this video’s saved password.</p>`
     }
   ];
 
-  let step = 0;
-  let videoData = null;
+  const $ = (id) => document.getElementById(id);
+  const stage = $('stage'), dots = $('dots'), fill = $('fill'), label = $('stepLabel'),
+        percent = $('percent'), back = $('back'), next = $('next'), status = $('status');
 
-  const stage = document.getElementById('stage');
-  const dots = document.getElementById('dots');
-  const fill = document.getElementById('fill');
-  const label = document.getElementById('stepLabel');
-  const percent = document.getElementById('percent');
-  const back = document.getElementById('back');
-  const next = document.getElementById('next');
-  const status = document.getElementById('status');
+  const say = (msg, error) => { status.textContent = msg; status.classList.toggle('error', !!error); };
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[c]));
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   async function loadVideoData() {
     try {
-      const response = await fetch('./videos.json', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Could not load videos.json');
-
-      const data = await response.json();
-
-      videoData = (data.videos || []).find(video =>
-        String(video.id || '') === videoId
-      ) || null;
-    } catch (error) {
-      console.error('Password data error:', error);
+      const res = await fetch('./videos.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Could not load videos.json');
+      const data = await res.json();
+      videoData = (data.videos || []).find((v) => String(v.id || '') === videoId) || null;
+    } catch (e) {
+      console.error('Password data error:', e);
       videoData = null;
     }
   }
 
+  // Works with a hashed password (videoPWHash) or the older plain videoPW.
+  async function passwordMatches(entered) {
+    if (videoData.videoPWHash) {
+      return (await sha256(videoId + ':' + entered)) === String(videoData.videoPWHash);
+    }
+    return entered === String(videoData.videoPW || '');
+  }
+  const hasPassword = () => !!(videoData.videoPWHash || videoData.videoPW);
+
   function render() {
-    const current = stageDefinitions[step];
+    const cur = stageDefinitions[step];
+    stage.innerHTML = `<h2>${cur.title}</h2><p class="info">${cur.text}</p>${cur.field()}`;
 
-    stage.innerHTML = `
-      <h2>${current.title}</h2>
-      <p class="info">${current.text}</p>
-      ${current.field}
-    `;
-
-    // Restore the device values if the user returns to this step.
     if (step === 1) {
-      const seriesInput = document.getElementById('deviceSeries');
-      const nameInput = document.getElementById('deviceName');
-
-      if (seriesInput) seriesInput.value = selectedSeries;
-      if (nameInput) nameInput.value = selectedDeviceName;
+      $('deviceSeries').value = selectedSeries;
+      $('deviceName').value = selectedDeviceName;
     }
 
-    dots.innerHTML = stageDefinitions.map((_, i) =>
-      `<span class="dot ${i <= step ? 'active' : ''}"></span>`
-    ).join('');
-
-    fill.style.width =
-      ((step + 1) / stageDefinitions.length * 100) + '%';
-
-    label.textContent =
-      `Step ${step + 1} of ${stageDefinitions.length}`;
-
-    percent.textContent =
-      Math.round((step + 1) / stageDefinitions.length * 100) + '%';
-
+    dots.innerHTML = stageDefinitions.map((_, i) => `<span class="dot ${i <= step ? 'active' : ''}"></span>`).join('');
+    const pct = Math.round((step + 1) / stageDefinitions.length * 100);
+    fill.style.width = pct + '%';
+    label.textContent = `Step ${step + 1} of ${stageDefinitions.length}`;
+    percent.textContent = pct + '%';
     back.disabled = step === 0;
-    back.style.opacity = step === 0 ? '.5' : '1';
-
-    next.textContent = step === 5
-      ? 'Continue to password →'
-      : step === 6
-        ? 'Verify password →'
-        : 'Continue →';
+    next.textContent = step === 5 ? 'Continue to password →' : step === 6 ? 'Verify password →' : 'Continue →';
 
     if (step === 5) {
-      document.getElementById('finalSummary').innerHTML =
+      $('finalSummary').innerHTML =
         `<b>Theme:</b> ${escapeHtml(title)}<br>` +
         `<b>Device Series:</b> ${escapeHtml(selectedSeries)}<br>` +
         `<b>Device Name:</b> ${escapeHtml(selectedDeviceName)}<br>` +
@@ -252,126 +168,66 @@ html[data-theme="dark"] .intro,html[data-theme="dark"] .panel{background:var(--s
   }
 
   next.addEventListener('click', async () => {
-    status.textContent = '';
-    status.classList.remove('error');
+    say('');
 
-    // Step 2: validate and remember the device selection.
     if (step === 1) {
-      const seriesInput = document.getElementById('deviceSeries');
-      const nameInput = document.getElementById('deviceName');
-
-      selectedSeries = seriesInput?.value || '';
-      selectedDeviceName = nameInput?.value.trim() || '';
-
-      if (!selectedSeries) {
-        status.textContent = 'Please select your device series.';
-        status.classList.add('error');
-        return;
-      }
-
-      if (!selectedDeviceName) {
-        status.textContent = 'Please enter your device name.';
-        status.classList.add('error');
-        nameInput?.focus();
-        return;
-      }
+      selectedSeries = $('deviceSeries')?.value || '';
+      selectedDeviceName = $('deviceName')?.value.trim() || '';
+      if (!selectedSeries) return say('Please select your device series.', true);
+      if (!selectedDeviceName) { $('deviceName')?.focus(); return say('Please enter your device name.', true); }
     }
+    if (step === 2 && !$('compat')?.checked) return say('Please confirm you checked compatibility to continue.', true);
+    if (step === 3 && !$('backup')?.checked) return say('Please acknowledge the backup reminder to continue.', true);
 
-    if (step === 2 && !document.getElementById('compat')?.checked) {
-      status.textContent =
-        'Please confirm you checked compatibility to continue.';
-      status.classList.add('error');
-      return;
-    }
-
-    if (step === 3 && !document.getElementById('backup')?.checked) {
-      status.textContent =
-        'Please acknowledge the backup reminder to continue.';
-      status.classList.add('error');
-      return;
-    }
-
-    // Final step: verify the password associated with this video.
     if (step === 6) {
-      const entered =
-        document.getElementById('videoPassword')?.value ?? '';
-
-      if (!videoId) {
-        status.textContent =
-          'This download link is missing its video ID. Return to the store and open the download again.';
-        status.classList.add('error');
-        return;
-      }
+      const entered = $('videoPassword')?.value ?? '';
+      if (!videoId) return say('This download link is missing its video ID. Return to the store and open the download again.', true);
 
       next.disabled = true;
       next.textContent = 'Checking…';
-
-      if (!videoData) {
-        await loadVideoData();
-      }
-
+      if (!videoData) await loadVideoData();
       next.disabled = false;
       next.textContent = 'Verify password →';
 
-      if (!videoData) {
-        status.textContent =
-          'Could not find this video in videos.json. Please return to the store and try again.';
-        status.classList.add('error');
+      if (!videoData) return say('Could not find this video in videos.json. Please return to the store and try again.', true);
+      if (!hasPassword()) return say('No password has been set for this video yet. Please contact the site owner.', true);
+
+      let ok = false;
+      try { ok = await passwordMatches(entered); }
+      catch (e) { return say('Password check needs a secure (https) page.', true); }
+
+      if (!ok) {
+        say('Incorrect password. Please try again.', true);
+        const input = $('videoPassword');
+        input.classList.remove('shake'); void input.offsetWidth; input.classList.add('shake');
         return;
       }
-
-      const savedPassword = String(videoData.videoPW || '');
-
-      if (!savedPassword) {
-        status.textContent =
-          'No password has been set for this video yet. Please contact the site owner.';
-        status.classList.add('error');
-        return;
-      }
-
-      if (entered !== savedPassword) {
-        status.textContent = 'Incorrect password. Please try again.';
-        status.classList.add('error');
-        return;
-      }
-
-      if (url) {
-        status.textContent = 'Password accepted. Opening download…';
-        location.href = url;
-      } else {
-        status.textContent =
-          'Password accepted, but no valid download link was supplied.';
-        status.classList.add('error');
-      }
-
+      if (url) { say('Password accepted. Opening download…'); location.href = url; }
+      else say('Password accepted, but no valid download link was supplied.', true);
       return;
     }
 
-    if (step < stageDefinitions.length - 1) {
-      step++;
-      render();
-    }
+    if (step < stageDefinitions.length - 1) { step++; render(); }
   });
 
   back.addEventListener('click', () => {
-    if (step > 0) {
-      // Save device values before leaving the device step.
-      if (step === 2) {
-        selectedSeries =
-          document.getElementById('deviceSeries')?.value || selectedSeries;
-
-        selectedDeviceName =
-          document.getElementById('deviceName')?.value.trim() || selectedDeviceName;
-      }
-
-      step--;
-      status.textContent = '';
-      status.classList.remove('error');
-      render();
+    if (step === 1) {
+      selectedSeries = $('deviceSeries')?.value || selectedSeries;
+      selectedDeviceName = $('deviceName')?.value.trim() || selectedDeviceName;
     }
+    if (step > 0) { step--; say(''); render(); }
   });
 
-  loadVideoData().then(render);
+  document.addEventListener('pointerdown', (e) => {
+    const el = e.target.closest('.g');
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--x', e.clientX - r.left + 'px');
+    el.style.setProperty('--y', e.clientY - r.top + 'px');
+    el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  });
+
+  render();
 })();
 </script>
 </body>
